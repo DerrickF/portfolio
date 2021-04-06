@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
+import { SharedModule } from '../shared/shared.module';
+import { CodingSvgComponent } from './components/coding-svg/coding-svg.component';
 
 
 @NgModule({
@@ -12,8 +14,13 @@ import { HomePageRoutingModule } from './home-routing.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    SharedModule,
   ],
-  declarations: [HomePage]
+  declarations: [
+    HomePage,
+    CodingSvgComponent
+
+  ]
 })
 export class HomePageModule {}

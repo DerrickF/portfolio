@@ -1,20 +1,43 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+<ion-header class="ion-no-border">
+    <ion-toolbar color="light">
+        <ion-item color="light" lines="none" slot="start">
+            <ion-img style="max-width: 50px; height: auto;" src="../assets/angular-logo.png"></ion-img>
+            <ion-text color="dark" style="font-family: Signika; font-weight: bold;">
+                Derrick Fink
+            </ion-text>
+        </ion-item>
+        <ion-item color="light" slot="end" lines="none">
+            <ion-icon name="moon-outline"></ion-icon>
+            <ion-toggle [(ngModel)]="dark" (ionChange)="updateDarkMode()"></ion-toggle>
+        </ion-item>
     </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+</ion-header>
+<ion-content [fullscreen]="true">
+    <div class="container">
+        <ion-grid>
+            <ion-row style="height: 60%" class="ion-justify-content-center ion-align-items-center ion-padding">
+                <ion-col size="4" class="ion-padding-left ion-align-self-center" style="text-align: center;">
+                    <ion-row>
+                        <div class="greeting">
+                            <div [innerHtml]="icon"></div>
+                            <ion-text color="dark"><span>Hey, Im</span></ion-text>
+                        </div>
+                    </ion-row>
+                    <ion-row>
+                        <div class="hero-text">
+                            <ion-text style="font-size: 6vw;" color="dark">
+                                Derrick
+                            </ion-text>
+                            <ion-text style="font-size: 4vw" color="dark">
+                                and I love writing code.
+                            </ion-text>
+                        </div>
+                    </ion-row>
+                </ion-col>
+                <ion-col class="ion-hide-sm-down">
+                    <app-coding-svg></app-coding-svg>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
 </ion-content>

@@ -7,6 +7,26 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  dark = false;
+  icon = '&#128075;';
+
+  constructor() {
+    const prefersColor = window.matchMedia('(prefers-color-scheme: dark)');
+    this.dark = prefersColor.matches;
+    this.updateDarkMode();
+
+    prefersColor.addEventListener(
+      'change',
+      mediaQuery => {
+        this.dark = mediaQuery.matches;
+        this.updateDarkMode();
+      }
+    );
+  }
+
+  updateDarkMode() {
+    console.log('dark:', this.dark);
+    document.body.classList.toggle('dark', this.dark);
+  }
 
 }
