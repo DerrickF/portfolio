@@ -25,8 +25,7 @@ export class HomePage {
   }
 
   updateDarkMode() {
-    console.log('dark:', this.dark);
-    document.body.classList.toggle('dark', this.dark);
+    document.body.classList.toggle('dark', !this.dark);
   }
 
 }

@@ -1,5 +1,5 @@
 <ion-header class="ion-no-border">
-    <ion-toolbar color="light">
+    <ion-toolbar color="light" class="toolbar">
         <ion-item color="light" lines="none" slot="start">
             <ion-img style="max-width: 50px; height: auto;" src="../assets/angular-logo.png"></ion-img>
             <ion-text color="dark" style="font-family: Signika; font-weight: bold;">
@@ -7,35 +7,90 @@
             </ion-text>
         </ion-item>
         <ion-item color="light" slot="end" lines="none">
-            <ion-icon name="moon-outline"></ion-icon>
             <ion-toggle [(ngModel)]="dark" (ionChange)="updateDarkMode()"></ion-toggle>
+            <ion-icon style="margin-left: 10px;" name="moon-outline"></ion-icon>
         </ion-item>
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
     <div class="container">
-        <ion-grid>
-            <ion-row style="height: 60%" class="ion-justify-content-center ion-align-items-center ion-padding">
-                <ion-col size="4" class="ion-padding-left ion-align-self-center" style="text-align: center;">
+        <ion-grid style="padding: 0px;">
+            <ion-row class="ion-justify-content-center ion-align-items-center ion-padding">
+                <ion-col size-xs="12" size-md="4" class="ion-padding-left ion-align-self-center" style="text-align: center;">
                     <ion-row>
                         <div class="greeting">
-                            <div [innerHtml]="icon"></div>
+                            <div id="hand" [innerHtml]="icon"></div>
                             <ion-text color="dark"><span>Hey, Im</span></ion-text>
                         </div>
                     </ion-row>
                     <ion-row>
                         <div class="hero-text">
-                            <ion-text style="font-size: 6vw;" color="dark">
+                            <ion-text style="font-size: 8vw;" color="dark">
                                 Derrick
                             </ion-text>
-                            <ion-text style="font-size: 4vw" color="dark">
+                            <ion-text style="font-size: 6vw" color="dark">
                                 and I love writing code.
                             </ion-text>
                         </div>
                     </ion-row>
                 </ion-col>
-                <ion-col class="ion-hide-sm-down">
-                    <app-coding-svg></app-coding-svg>
+                <ion-col>
+                    <app-coding-svg [darkmode]="dark"></app-coding-svg>
+                </ion-col>
+            </ion-row>
+            <ion-row style="margin-top: 40px" class="ion-justify-content-center">
+                <ion-col size="10">
+                    <ion-card>
+                        <img alt="stacking tiles" src="../../assets/full-stack.jpeg" />
+                        <ion-card-header>
+                            <ion-card-subtitle>Currently working as a</ion-card-subtitle>
+                            <ion-card-title>Full Stack Developer</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col size="12">
+                                        <h2>I know what your thinking...'Hey, whats your stack ?'</h2>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col size="12">
+                                        <ion-list>
+                                            <ion-item>
+                                                <ion-label>Angular</ion-label>
+                                                <ion-icon color="danger" style="font-size: 25x;" slot="start" name="logo-angular"></ion-icon>
+                                            </ion-item>
+                                            <ion-item>
+                                                <ion-label>Ionic</ion-label>
+                                                <ion-icon color="danger" style="font-size: 25x;" slot="start" name="logo-ionic"></ion-icon>
+                                            </ion-item>
+                                            <ion-item>
+                                                <ion-label>DotNet Core</ion-label>
+                                                <ion-icon color="danger" style="font-size: 25x;" slot="start" name="logo-windows"></ion-icon>
+                                            </ion-item>
+                                            <ion-item>
+                                                <ion-label>AWS</ion-label>
+                                                <ion-icon color="danger" style="font-size: 25x;" slot="start" name="cloud"></ion-icon>
+                                            </ion-item>
+                                        </ion-list>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ion-card-content>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-card>
+                        <ion-card-header>
+                            <ion-card-subtitle>Reach out</ion-card-subtitle>
+                            <ion-card-title>Want to get in touch?</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                            Awesome content
+                        </ion-card-content>
+                    </ion-card>
                 </ion-col>
             </ion-row>
         </ion-grid>

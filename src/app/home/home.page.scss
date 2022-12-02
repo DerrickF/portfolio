@@ -1,13 +1,68 @@
+body,
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    font-family: Signika
+}
+
 .container {
     background: linear-gradient(90deg, var(--ion-color-primary) 65%, var(--ion-color-light) 35%);
-    height: 100%
+    width: 100vw;
+    height: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.first-card {
+    width: 100%;
+    background-color: var(--ion-color-primary)
 }
 
 .greeting {
     margin-left: 10%;
     font-family: Caveat;
-    font-size: 3vw;
-    transform: rotate(-20deg);
+    font-size: 4vw;
+    #hand {
+        animation: wave 2.1s 1s infinite;
+        animation-delay: 3s;
+        transform-origin: 75% 75%;
+    }
+
+    @keyframes wave {
+            0% {
+                transform: rotate(0deg);
+            }
+        
+            10% {
+                transform: rotate(16deg);
+            }
+        
+            20% {
+                transform: rotate(-6deg);
+            }
+        
+            30% {
+                transform: rotate(16deg);
+            }
+        
+            40% {
+                transform: rotate(-4deg);
+            }
+        
+            50% {
+                transform: rotate(16deg);
+            }
+        
+            60% {
+                transform: rotate(0deg);
+            }
+        
+            100% {
+                transform: rotate(0deg);
+            }
+    }
 }
 
 .hero-text {
@@ -16,8 +71,7 @@
     margin-left: 15%;
 }
 
-.toolbar-dark {
-    background: linear-gradient(90deg, var(--ion-color-primary) 65%, var(--ion-color-light) 35%);;
+.toolbar {
     font-family: Signika;
     font-weight: bold;
     font-size: x-large;
@@ -33,4 +87,25 @@ ion-grid {
 
 .right {
     background-color: var(--ion-color-light);
+}
+
+/* Works on Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ion-color-primary)
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 5px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: var(--ion-color-light);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--ion-color-light-contrast);
+    border-radius: 20px;
+
 }
