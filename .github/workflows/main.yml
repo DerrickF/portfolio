@@ -11,7 +11,18 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v1
-
+      
+    - name: Build
+      uses: actions/setup-node@v2
+      with: 
+        node-version: '18'
+        
+    - name: Install Deps
+      run: npm install
+      
+    - name: Build
+      run: npm run build -- --prod
+      
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
