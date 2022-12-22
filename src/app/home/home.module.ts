@@ -7,6 +7,7 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { CodingSvgComponent } from './components/coding-svg/coding-svg.component';
+import { StandAloneComponent } from '../stand-alone.component';
 
 
 @NgModule({
@@ -17,11 +18,8 @@ import { CodingSvgComponent } from './components/coding-svg/coding-svg.component
     IonicModule,
     HomePageRoutingModule,
     SharedModule,
+    StandAloneComponent,
   ],
-  declarations: [
-    HomePage,
-    CodingSvgComponent
-
-  ]
+  declarations: [HomePage, CodingSvgComponent],
 })
 export class HomePageModule {}
