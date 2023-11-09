@@ -6,163 +6,18 @@
                 Derrick Fink
             </ion-text>
         </ion-item>
-        <ion-item color="light" slot="end" lines="none">
+        <!-- <ion-item color="light" slot="end" lines="none">
             <ion-toggle [(ngModel)]="dark" (ionChange)="updateDarkMode()"></ion-toggle>
             <ion-icon style="margin-left: 10px;" name="moon-outline"></ion-icon>
-        </ion-item>
+        </ion-item> -->
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
-    <div class="container">
-        <ion-grid style="padding: 0px;">
-            <ion-row style="min-height: 50vh" class="ion-justify-content-center ion-align-items-center ion-padding">
-                <ion-col size-xs="8" size-md="10" class="ion-padding-left ion-align-self-center" style="text-align: center;">
-                    <ion-row>
-                        <div class="greeting">
-                            <div id="hand" [innerHtml]="icon"></div>
-                            <ion-text color="dark"><span>Hey, Im</span></ion-text>
-                        </div>
-                    </ion-row>
-                    <ion-row>
-                        <div class="hero-text">
-                            <ion-text color="dark">
-                                Derrick
-                            </ion-text>
-                            <ion-text color="dark">
-                                and I love writing code.
-                            </ion-text>
-                        </div>
-                    </ion-row>
-                </ion-col>
-                <ion-col size-xs="12">
-                    <app-coding-svg [darkmode]="dark"></app-coding-svg>
-                </ion-col>
-            </ion-row>
-            <ion-row style="margin-top: 40px" class="ion-justify-content-center">
-                <ion-col size-xs="8" size-md="6">
-                    <ion-card>
-                        <ion-img style="background-color: #FAFBFD" alt="stacking tiles" src="../../assets/fullstack.png"></ion-img>
-                        <ion-card-header>
-                            <ion-card-subtitle style="font-family: 'Caveat'; font-size: x-large;">Experienced</ion-card-subtitle>
-                            <ion-card-title style="font-size: xx-large">Full Stack Developer</ion-card-title>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <ion-grid>
-                                <ion-row>
-                                    <ion-col size="12">
-                                        <ion-list>
-                                            <ion-item>
-                                                <ion-label>Angular</ion-label>
-                                                <ion-icon color="danger" style="font-size: 25x;" slot="start" name="logo-angular"></ion-icon>
-                                            </ion-item>
-                                            <ion-item>
-                                                <ion-label>Ionic</ion-label>
-                                                <ion-icon color="danger" style="font-size: 25x;" slot="start" name="logo-ionic"></ion-icon>
-                                            </ion-item>
-                                            <ion-item>
-                                                <ion-label>.Net Core</ion-label>
-                                                <ion-icon color="danger" style="font-size: 25x;" slot="start" name="logo-windows"></ion-icon>
-                                            </ion-item>
-                                            <ion-item>
-                                                <ion-label>AWS</ion-label>
-                                                <ion-icon color="danger" style="font-size: 25x;" slot="start" name="cloud"></ion-icon>
-                                            </ion-item>
-                                        </ion-list>
-                                    </ion-col>
-                                </ion-row>
-                            </ion-grid>
-                        </ion-card-content>
-                    </ion-card>
-                </ion-col>
-            </ion-row>
-            <ion-row class="ion-justify-content-center">
-                <ion-col size-xs="8" size-md="3">
-                    <ion-card>
-                        <ion-img alt="developers toolbox" src="../../assets/DevelopersToolbox.png"></ion-img>
-                        <ion-card-header>
-                            <ion-card-subtitle style="font-family: 'Caveat'; font-size: x-large;">Project</ion-card-subtitle>
-                            <ion-card-title style="font-size: xx-large">Developers Toolbox</ion-card-title>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <h1>
-                                Developers toolbox is a collection of tools to help software developers in there everyday work like.
-                            </h1>
-                            <ion-list>
-                                <ion-list-header>
-                                    <ion-label>Features</ion-label>
-                                </ion-list-header>
-                                <ion-item>
-                                    <ion-label>TODO list</ion-label>
-                                </ion-item>
-                                <ion-item>
-                                    <ion-label>Poomodoro Timer</ion-label>
-                                </ion-item>
-                                <ion-item>
-                                    <ion-label>Canvas Whiteboard</ion-label>
-                                </ion-item>
-                                <ion-item>
-                                    <ion-label>Hydration Tracking</ion-label>
-                                </ion-item>
-                            </ion-list>
-                            <ion-item lines="none">
-                                <ion-button fill="outline" slot="end" color="contrast">
-                                    <ion-icon slot="end" name="arrow-forward"></ion-icon>
-                                    Check it out
-                                </ion-button>
-                            </ion-item>
-                        </ion-card-content>
-                    </ion-card>
-                </ion-col>
-                <ion-col size-xs="8" size-md="3">
-                    <ion-card>
-                        <ion-img style="background-color: #FAFBFD" alt="developers toolbox" src="../../assets/interactive-resume.png"></ion-img>
-                        <ion-card-header>
-                            <ion-card-subtitle style="font-family: 'Caveat'; font-size: x-large;">VS Code Extension</ion-card-subtitle>
-                            <ion-card-title style="font-size: xx-large">Ioinc Icon Utility</ion-card-title>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <ion-grid>
-                                <ion-row>
-                                    <ion-col size="12">
-                                        <h1>The ionic-icons-picker extension provides a convenient way to browse and select icons from the Ionic Icons library
-                                        within Visual Studio Code. With this extension, you can easily search and insert icons into your HTML or CSS files.</h1>
-                                    </ion-col>
-                                </ion-row>
-                            </ion-grid>
-                            <ion-item lines="none">
-                                <ion-button fill="outline" href="https://marketplace.visualstudio.com/items?itemName=IonicIconsPicker.ionic-icons-picker#review-details">
-                                    <ion-icon slot="end" name="arrow-forward"></ion-icon>
-                                    Check it out
-                                </ion-button>
-                            </ion-item>
-                        </ion-card-content>
-                    </ion-card>
-                </ion-col>
-                <ion-col size-xs="8" size-md="3">
-                    <ion-card>
-                        <ion-img style="background-color: #FAFBFD" alt="developers toolbox" src="../../assets/blog.png"></ion-img>
-                        <ion-card-header>
-                            <ion-card-subtitle style="font-family: 'Caveat'; font-size: x-large;">Project</ion-card-subtitle>
-                            <ion-card-title style="font-size: xx-large">Blog</ion-card-title>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <ion-grid>
-                                <ion-row>
-                                    <ion-col size="12">
-                                        <h1>What if I had a blog where i wrote about stuff? This is where that would be if I did do such a thing.</h1>
-                                    </ion-col>
-                                </ion-row>
-                            </ion-grid>
-                            <ion-item lines="none">
-                                <ion-button fill="outline">
-                                    <ion-icon slot="end" name="arrow-forward"></ion-icon>
-                                    Check it out
-                                </ion-button>
-                            </ion-item>
-                        </ion-card-content>
-                    </ion-card>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
+    <div id="img" style="width: 100%; height: 100%">
+        <div class="menu-bar">
+            <div class="menu-item"><a href="#" style="text-decoration: none;">DevToolbox</a></div>
+            <div class="menu-item"><a href="#" style="text-decoration: none;">Coffee+Code Blog</a></div>
+            <div class="menu-item"><a href="#" style="text-decoration: none;">IonIcons Picker</a></div>
+        </div>
     </div>
 </ion-content>

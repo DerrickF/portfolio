@@ -5,6 +5,80 @@ html {
     margin: 0;
 }
 
+#img {
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../../assets/me_400x400 (1).png');
+    background-size: cover;
+    background-position: center center;
+}
+
+.menu-bar {
+    color: white;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    -webkit-align-content: stretch;
+    align-content: stretch;
+    -webkit-align-items: space-between;
+    align-items: space-between;
+    margin-left: 10%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    height: 20%;
+}
+
+.menu-item {
+    opacity: 0;
+    transform: translateX(-50px);
+    font-family: 'Share Tech Mono', monospace;
+    font-weight: bold;
+    font-size: 4vh;
+    flex-direction: column;
+    -webkit-order: 0;
+    order: 0;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: stretch;
+    align-self: stretch;
+    text-decoration: none;
+    color: white;
+    a {
+        box-shadow: inset 0 0 0 0 var(--ion-color-primary);
+        color: var(--ion-color-secondary);
+        margin: 0 -.25rem;
+        padding: 0 .25rem;
+        transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+      }
+      a:hover {
+        box-shadow: inset 100px 0 0 0 var(--ion-color-primary);
+        color: white;
+      }
+}
+  
+/* Define the animation */
+@keyframes fadeInLeft {
+from {
+    opacity: 0;
+    transform: translateX(-50px);
+}
+to {
+    opacity: 1;
+    transform: translateX(0);
+}
+}
+
+/* Class that gets added by TypeScript */
+.fade-in-left {
+animation: fadeInLeft 0.5s forwards;
+}
+
+
 .container {
     background: linear-gradient(90deg, var(--ion-color-primary) 65%, var(--ion-color-light) 35%);
     width: 100vw;
@@ -18,61 +92,6 @@ html {
     }
 }
 
-.first-card {
-    width: 100%;
-    background-color: var(--ion-color-primary)
-}
-
-.greeting {
-    margin-left: 10%;
-    font-family: Caveat;
-    font-size: calc(1em + 4vw);
-    #hand {
-        animation: wave 2.1s 1s infinite;
-        animation-delay: 3s;
-        transform-origin: 75% 75%;
-    }
-
-    @keyframes wave {
-            0% {
-                transform: rotate(0deg);
-            }
-        
-            10% {
-                transform: rotate(16deg);
-            }
-        
-            20% {
-                transform: rotate(-6deg);
-            }
-        
-            30% {
-                transform: rotate(16deg);
-            }
-        
-            40% {
-                transform: rotate(-4deg);
-            }
-        
-            50% {
-                transform: rotate(16deg);
-            }
-        
-            60% {
-                transform: rotate(0deg);
-            }
-        
-            100% {
-                transform: rotate(0deg);
-            }
-    }
-}
-
-.hero-text {
-    font-size: calc(2em + 4vw);
-    font-weight: bold;
-    margin-left: 15%;
-}
 
 .toolbar {
     font-weight: bold;
