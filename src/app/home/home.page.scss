@@ -1,17 +1,12 @@
-body,
-html {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-}
 
-#img {
+html,
+body {
     width: 100vw;
     height: 100vh;
-    background-image: url('../../assets/me_400x400 (1).png');
+    background-image: url('./../../assets/shapes.svg');
     background-size: cover;
-    background-position: center center;
 }
+
 
 .menu-bar {
     color: white;
