@@ -1,127 +1,78 @@
-
-html,
-body {
-    width: 100vw;
-    height: 100vh;
-    background-image: url('./../../assets/shapes.svg');
+  .full-screen-background {
+    margin-top: 50px;
+    background-image: url('../../assets/shapes.svg'); /* Adjust the path as needed */
     background-size: cover;
-}
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 100vh; /* 100% of the viewport height */
+    width: 100vw; /* 100% of the viewport width */
+    position: fixed; /* Ensures the background is fixed during content scrolling */
+    top: 0;
+    left: 0;
+    z-index: -1; /* Ensures the background stays behind other content */
+  }
 
+  .name-tag-container {
+    display: flex; /* Enable Flexbox */
+    align-items: center; /* Vertically center the flex items */
+    justify-content: center; /* Horizontally center the flex items (if needed) */
+    width: 100%;
+    margin-top: 10vh
+  }
 
-.menu-bar {
-    color: white;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-    -webkit-flex-wrap: nowrap;
-    flex-wrap: nowrap;
-    -webkit-justify-content: space-between;
-    justify-content: space-between;
-    -webkit-align-content: stretch;
-    align-content: stretch;
-    -webkit-align-items: space-between;
-    align-items: space-between;
-    margin-left: 10%;
-    padding-top: 50px;
-    padding-bottom: 50px;
-    height: 20%;
-}
-
-.menu-item {
-    opacity: 0;
-    transform: translateX(-50px);
-    font-family: 'Share Tech Mono', monospace;
-    font-weight: bold;
-    font-size: 4vh;
-    flex-direction: column;
-    -webkit-order: 0;
-    order: 0;
-    -webkit-flex: 0 1 auto;
-    flex: 0 1 auto;
-    -webkit-align-self: stretch;
-    align-self: stretch;
-    text-decoration: none;
-    color: white;
-    a {
-        box-shadow: inset 0 0 0 0 var(--ion-color-primary);
-        color: var(--ion-color-secondary);
-        margin: 0 -.25rem;
-        padding: 0 .25rem;
-        transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
-      }
-      a:hover {
-        box-shadow: inset 100px 0 0 0 var(--ion-color-primary);
-        color: white;
-      }
-}
-  
-/* Define the animation */
-@keyframes fadeInLeft {
-from {
-    opacity: 0;
-    transform: translateX(-50px);
-}
-to {
-    opacity: 1;
-    transform: translateX(0);
-}
-}
-
-/* Class that gets added by TypeScript */
-.fade-in-left {
-animation: fadeInLeft 0.5s forwards;
-}
-
-
-.container {
-    background: linear-gradient(90deg, var(--ion-color-primary) 65%, var(--ion-color-light) 35%);
-    width: 100vw;
-    height: 100%;
-    min-height: 100%;
-    box-sizing: border-box;
-    overflow-x: hidden;
-
-    @media (max-width: 768px) {
-        background: var(--ion-color-primary);
-    }
-}
-
-
-.toolbar {
-    font-weight: bold;
-    font-size: x-large;
-}
-
-ion-grid {
-    height: 100%;
-}
-
-.left {
-    background-color: var(--ion-color-primary);
-}
-
-.right {
-    background-color: var(--ion-color-light);
-}
-
-/* Works on Firefox */
-* {
-    scrollbar-width: thin;
-    scrollbar-color: var(--ion-color-primary)
-}
-
-/* Works on Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-    width: 5px;
-}
-
-*::-webkit-scrollbar-track {
-    background-color: var(--ion-color-light);
-}
-
-*::-webkit-scrollbar-thumb {
-    background-color: var(--ion-color-light-contrast);
+  .name-tag {
     border-radius: 20px;
+    max-width: 800px;
+    min-height: 500px;
+    width: 100%;
+    border: 2px solid #000; /* Black border for the name tag */
+    background-color: var(--ion-color-primary); /* Light red background, typical for a name tag */
+    color: white; /* Black text color */
+    text-align: center; /* Center the text */
+    font-size: 5em;
+    font-family: Arial, sans-serif; /* Default font for the greeting */
 
-}
+    .greeting {
+      font-size: 2em;
+      span {
+
+        font-size: 3em; /* Slightly larger font for the greeting */
+      }
+      margin-bottom: 15px; /* Space between the greeting and the name */
+    }
+    
+    .name {
+      font-size: 5em; /* Larger font size for the name */
+      font-family: 'Indie Flower', cursive; /* Handwriting-like font */
+      color: black;
+    }
+  
+    ion-card-content {
+      position: relative; /* Allows absolute positioning relative to this container */
+    }
+    
+    .full-width-div {
+      position: absolute; /* Position the div absolutely to break it out of the normal document flow */
+      left: 0; /* Align to the left edge of ion-card-content */
+      right: 0; /* Align to the right edge of ion-card-content */
+      bottom: 0px;
+      width: 100%;
+      background-color: white;
+      display: flex; /* Enable Flexbox */
+      align-items: center; /* Vertically center the flex items */
+      justify-content: center; /* Horizontally center the flex items (if needed) */
+      height: 200px;
+      text-align: center; /* Center the text horizontally if it's not a flex item */
+    }
+
+    .no-padding {
+      --padding-start: 0;
+      --padding-end: 0;
+      --padding-top: 0;
+      --padding-bottom: 0;
+    }
+
+    .spacer {
+      height: 200px; /* Should match the height of the absolutely positioned div */
+    }
+  }
