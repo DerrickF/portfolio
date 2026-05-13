@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>derrickfink.com — Pocket PC</title>
+  <meta name="theme-color" content="#3a3d44">
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       HP iPAQ-style PDA running Windows Mobile 2003
+       Silver aluminum body + black bezel + Today screen
+       Design canvas: 280 × 460 units. JS scales via --u.
+       ═══════════════════════════════════════════════════════════ */
+    :root {
+      --u: 1px;
+
+      /* Silver aluminum body */
+      --body-1: #d8dadf;
+      --body-2: #b8bbc2;
+      --body-3: #8d9098;
+      --body-4: #5f6168;
+      --body-edge: #3a3c42;
+      --body-shadow: #1c1e22;
+
+      /* Black face / screen bezel */
+      --face: #1a1c1e;
+      --face-2: #0a0b0c;
+
+      /* WM2003 palette — more grey-blue than Win95 */
+      --wm-bg:   #ECE9D8;
+      --wm-bg2:  #F5F4EC;
+      --wm-tb1:  #0054E3;   /* WM2003 title bar gradient */
+      --wm-tb2:  #5491E3;
+      --wm-task: #245EDC;
+      --wm-task-end: #3A6FE3;
+      --wm-blue: #0a246a;
+      --wm-light:#FFFFFF;
+      --wm-dark: #ACA899;
+      --wm-darker:#716F64;
+      --wm-text: #000000;
+      --wm-link: #0033B1;
+      --wm-accent:#FFA500;
+
+      /* Today banner blue */
+      --wm-today1: #284FAB;
+      --wm-today2: #4A78D8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      font-family: Tahoma, 'MS Sans Serif', Arial, sans-serif;
+      font-size: calc(var(--u) * 8.5);
+      display: flex; align-items: center; justify-content: center;
+      background:
+        radial-gradient(ellipse at center, #4a8284 0%, #1f5658 70%, #003e44 100%);
+      background-color: #008080;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none; user-select: none;
+      color: var(--wm-text);
+    }
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='4' height='4' viewBox='0 0 4 4' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='0' width='2' height='2' fill='%23007070' opacity='0.3'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* ═══════════════ iPAQ BODY ═══════════════ */
+    .device {
+      position: relative;
+      width: calc(var(--u) * 280);
+      height: calc(var(--u) * 460);
+      flex-shrink: 0;
+      background:
+        linear-gradient(160deg,
+          var(--body-1) 0%,
+          var(--body-2) 35%,
+          var(--body-3) 70%,
+          var(--body-4) 100%);
+      border-radius: calc(var(--u) * 20) calc(var(--u) * 20) calc(var(--u) * 28) calc(var(--u) * 28);
+      box-shadow:
+        inset 0 calc(var(--u) * 2) 0 rgba(255,255,255,0.7),
+        inset 0 calc(var(--u) * -3) 0 rgba(0,0,0,0.3),
+        inset calc(var(--u) * 2) 0 calc(var(--u) * 1) rgba(255,255,255,0.4),
+        inset calc(var(--u) * -2) 0 calc(var(--u) * 1) rgba(0,0,0,0.25),
+        0 calc(var(--u) * 16) calc(var(--u) * 32) rgba(0,0,0,0.55);
+    }
+
+    /* Brushed-metal texture overlay */
+    .device::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(90deg,
+        rgba(255,255,255,0.04) 0 1px,
+        transparent 1px 3px);
+      border-radius: inherit;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+
+    /* ─────────── TOP BEZEL: power button, LEDs, hp logo ─────────── */
+    .top-bezel {
+      position: absolute;
+      top: calc(var(--u) * 6);
+      left: calc(var(--u) * 14);
+      right: calc(var(--u) * 14);
+      height: calc(var(--u) * 18);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .hp-logo {
+      width: calc(var(--u) * 18);
+      height: calc(var(--u) * 14);
+      border-radius: calc(var(--u) * 2);
+      background: linear-gradient(135deg, #2a2c30 0%, #1a1c20 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #d4d6dc;
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+      font-size: calc(var(--u) * 8);
+      letter-spacing: -0.05em;
+      box-shadow:
+        inset 0 calc(var(--u) * 1) 0 rgba(255,255,255,0.15),
+        inset 0 calc(var(--u) * -1) 0 rgba(0,0,0,0.5);
+    }
+
+    .top-leds {
+      display: flex;
+      gap: calc(var(--u) * 3);
+    }
+    .led {
+      width: calc(var(--u) * 4);
+      height: calc(var(--u) * 4);
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #4a4c52 0%, #1a1c20 100%);
+      box-shadow: inset 0 calc(var(--u) * 0.5) 0 rgba(0,0,0,0.5);
+    }
+    .led.on-green { background: radial-gradient(circle at 30% 30%, #80ff80 0%, #1a8a1a 70%); box-shadow: 0 0 calc(var(--u) * 3) rgba(80, 255, 80, 0.7); }
+    .led.on-amber { background: radial-gradient(circle at 30% 30%, #ffd540 0%, #806000 70%); box-shadow: 0 0 calc(var(--u) * 3) rgba(255, 213, 64, 0.5); }
+
+    /* IR window / power button */
+    .power-btn {
+      position: absolute;
+      top: calc(var(--u) * -2);
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(var(--u) * 30);
+      height: calc(var(--u) * 5);
+      background: linear-gradient(180deg, var(--body-edge) 0%, var(--body-shadow) 100%);
+      border-radius: 0 0 calc(var(--u) * 3) calc(var(--u) * 3);
+      box-shadow: inset 0 calc(var(--u) * 1) calc(var(--u) * 1) rgba(0,0,0,0.6);
+    }
+
+    /* Stylus slot — top right corner */
+    .stylus {
+      position: absolute;
+      top: calc(var(--u) * -1);
+      right: calc(var(--u) * 20);
+      width: calc(var(--u) * 5);
+      height: calc(var(--u) * 14);
+      background: linear-gradient(180deg, #2a2c30 0%, #1a1c20 100%);
+      border-radius: 0 0 calc(var(--u) * 2) calc(var(--u) * 2);
+      box-shadow:
+        inset calc(var(--u) * 1) 0 0 rgba(255,255,255,0.05),
+        inset calc(var(--u) * -1) 0 0 rgba(0,0,0,0.4);
+    }
+    .stylus::after {
+      content: "";
+      position: absolute;
+      bottom: calc(var(--u) * 2);
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(var(--u) * 2);
+      height: calc(var(--u) * 2);
+      background: #4a4c52;
+      border-radius: 50%;
+    }
+
+    /* ─────────── SCREEN HOUSING (black bezel + LCD) ─────────── */
+    .screen-housing {
+      position: absolute;
+      top: calc(var(--u) * 30);
+      left: calc(var(--u) * 14);
+      right: calc(var(--u) * 14);
+      height: calc(var(--u) * 300);
+      background: linear-gradient(180deg, var(--face) 0%, var(--face-2) 100%);
+      border-radius: calc(var(--u) * 4);
+      padding: calc(var(--u) * 6);
+      box-shadow:
+        inset 0 calc(var(--u) * 1) 0 rgba(255,255,255,0.08),
+        inset 0 calc(var(--u) * -1) 0 rgba(0,0,0,0.7),
+        0 calc(var(--u) * 2) 0 rgba(255,255,255,0.3);
+    }
+
+    .lcd {
+      width: 100%; height: 100%;
+      background: var(--wm-bg);
+      border: calc(var(--u) * 1) solid #050606;
+      border-radius: calc(var(--u) * 1);
+      box-shadow:
+        inset 0 0 calc(var(--u) * 3) rgba(0,0,0,0.4);
+      overflow: hidden;
+      font-size: calc(var(--u) * 8);
+      line-height: 1.3;
+      display: flex; flex-direction: column;
+      position: relative;
+    }
+    .lcd::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0 1px, transparent 1px 3px);
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* ═══════════════ WM2003 TITLE BAR ═══════════════ */
+    .wm-tb {
+      flex-shrink: 0;
+      height: calc(var(--u) * 16);
+      background: linear-gradient(180deg, var(--wm-task) 0%, var(--wm-task-end) 100%);
+      display: flex;
+      align-items: center;
+      padding: 0 calc(var(--u) * 2);
+      gap: calc(var(--u) * 2);
+      color: #fff;
+      font-weight: bold;
+      font-size: calc(var(--u) * 7);
+      border-bottom: calc(var(--u) * 1) solid rgba(0,0,0,0.3);
+    }
+
+    /* Start flag button in TOP-LEFT (WM2003 style) */
+    .wm-start {
+      display: flex; align-items: center;
+      gap: calc(var(--u) * 1);
+      background: linear-gradient(180deg, #43a4f5 0%, #1d70cc 100%);
+      border: calc(var(--u) * 1) solid #0a3d8a;
+      padding: calc(var(--u) * 0.5) calc(var(--u) * 2);
+      border-radius: calc(var(--u) * 2);
+      color: #fff;
+      font-weight: bold;
+      font-size: calc(var(--u) * 7);
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: inset 0 calc(var(--u) * 1) 0 rgba(255,255,255,0.3);
+    }
+    .wm-start:active { background: linear-gradient(180deg, #1d70cc, #43a4f5); }
+
+    .wm-flag {
+      display: inline-flex; flex-wrap: wrap;
+      width: calc(var(--u) * 10);
+      height: calc(var(--u) * 8);
+      gap: calc(var(--u) * 0.5);
+    }
+    .wm-flag span {
+      width: calc(var(--u) * 4);
+      height: calc(var(--u) * 3.5);
+      transform: skewY(-12deg);
+    }
+    .wm-flag span:nth-child(1) { background: #ff3030; }
+    .wm-flag span:nth-child(2) { background: #30c030; }
+    .wm-flag span:nth-child(3) { background: #3030ff; }
+    .wm-flag span:nth-child(4) { background: #ffcc00; }
+
+    .wm-tb-title { flex: 1; text-align: center; }
+    .wm-tb-status { display: flex; gap: calc(var(--u) * 2); align-items: center; font-family: 'Tahoma', sans-serif; font-size: calc(var(--u) * 6); font-weight: normal; }
+    .wm-tb-status .ic {
+      display: inline-block;
+      width: calc(var(--u) * 9);
+      height: calc(var(--u) * 9);
+      background: #fff;
+      mask-position: center;
+      mask-repeat: no-repeat;
+      mask-size: contain;
+    }
+    /* Signal bars icon */
+    .wm-tb-status .ic-signal {
+      mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='2' y='10' width='2' height='4'/><rect x='6' y='8' width='2' height='6'/><rect x='10' y='6' width='2' height='8'/><rect x='14' y='4' width='2' height='10' opacity='0.4'/></svg>");
+    }
+    .wm-tb-status .ic-batt {
+      mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect x='1' y='2' width='14' height='8' fill='none' stroke='black' stroke-width='1.2'/><rect x='2.5' y='3.5' width='9' height='5'/><rect x='15' y='4' width='2' height='4'/></svg>");
+      width: calc(var(--u) * 14);
+    }
+    .wm-tb-clock {
+      font-family: Tahoma, sans-serif;
+      font-size: calc(var(--u) * 7);
+      color: #fff;
+    }
+
+    /* ═══════════════ TODAY SCREEN ═══════════════ */
+    .today {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      background: var(--wm-bg);
+      position: relative;
+    }
+    .today::-webkit-scrollbar { width: calc(var(--u) * 4); }
+    .today::-webkit-scrollbar-track { background: var(--wm-bg); }
+    .today::-webkit-scrollbar-thumb { background: var(--wm-dark); border: 1px solid var(--wm-darker); }
+
+    /* Today banner — owner card with blue gradient */
+    .today-banner {
+      background: linear-gradient(180deg, var(--wm-today1) 0%, var(--wm-today2) 100%);
+      color: #fff;
+      padding: calc(var(--u) * 4) calc(var(--u) * 4);
+      display: flex;
+      align-items: center;
+      gap: calc(var(--u) * 4);
+      border-bottom: calc(var(--u) * 1) solid var(--wm-dark);
+    }
+    .banner-icon {
+      width: calc(var(--u) * 28);
+      height: calc(var(--u) * 28);
+      background: #FFD700;
+      color: var(--wm-blue);
+      font-family: 'Arial Black', sans-serif;
+      font-weight: 900;
+      font-size: calc(var(--u) * 14);
+      display: inline-flex; align-items: center; justify-content: center;
+      border: calc(var(--u) * 1) solid #c9a420;
+      box-shadow: inset 0 calc(var(--u) * 1) 0 rgba(255,255,255,0.5), 0 calc(var(--u) * 1) 0 rgba(0,0,0,0.3);
+      flex-shrink: 0;
+    }
+    .banner-name {
+      font-weight: bold;
+      font-size: calc(var(--u) * 10);
+      text-shadow: 0 calc(var(--u) * 1) 0 rgba(0,0,0,0.4);
+    }
+    .banner-date {
+      font-size: calc(var(--u) * 7);
+      opacity: 0.9;
+      margin-top: calc(var(--u) * 0.5);
+    }
+
+    /* Today list items */
+    .today-list {
+      padding: calc(var(--u) * 1) 0;
+    }
+    .today-row {
+      display: flex; align-items: center; gap: calc(var(--u) * 4);
+      padding: calc(var(--u) * 3) calc(var(--u) * 4);
+      cursor: pointer;
+      border-bottom: calc(var(--u) * 1) dotted var(--wm-dark);
+      font-size: calc(var(--u) * 8);
+    }
+    .today-row:active {
+      background: var(--wm-tb1);
+      color: #fff;
+    }
+    .today-row .tr-ico {
+      width: calc(var(--u) * 18); height: calc(var(--u) * 18);
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .today-row .tr-text { flex: 1; }
+    .today-row .tr-text strong { display: block; font-weight: bold; }
+    .today-row .tr-text small { display: block; color: var(--wm-darker); font-size: 0.85em; margin-top: calc(var(--u) * 0.5); }
+    .today-row:active .tr-text small { color: #cdd; }
+
+    /* Pixel-style icons — colorful inline SVG backgrounds */
+    .pico {
+      width: calc(var(--u) * 18); height: calc(var(--u) * 18);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      flex-shrink: 0;
+      image-rendering: -webkit-optimize-contrast;
+    }
+
+    /* Calendar — classic red header + grid + today highlighted */
+    .pico-cal { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='3' width='14' height='12' fill='%23ffffff' stroke='%23333' stroke-width='0.6'/><rect x='1' y='3' width='14' height='3.5' fill='%23c8201f'/><rect x='3' y='1.5' width='1.5' height='2.7' fill='%23555' rx='0.3'/><rect x='11.5' y='1.5' width='1.5' height='2.7' fill='%23555' rx='0.3'/><rect x='2.5' y='7.5' width='1.8' height='1.8' fill='%23eaeaea'/><rect x='5.3' y='7.5' width='1.8' height='1.8' fill='%23eaeaea'/><rect x='8.1' y='7.5' width='1.8' height='1.8' fill='%23eaeaea'/><rect x='10.9' y='7.5' width='1.8' height='1.8' fill='%23eaeaea'/><rect x='2.5' y='10.3' width='1.8' height='1.8' fill='%23eaeaea'/><rect x='5.3' y='10.3' width='1.8' height='1.8' fill='%23c8201f'/><rect x='8.1' y='10.3' width='1.8' height='1.8' fill='%23eaeaea'/><rect x='10.9' y='10.3' width='1.8' height='1.8' fill='%23eaeaea'/></svg>"); }
+
+    /* Mail — yellow envelope with red flag */
+    .pico-mail { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1.5' y='4' width='13' height='9' fill='%23f5d265' stroke='%23805500' stroke-width='0.6'/><polyline points='1.5,4 8,9.5 14.5,4' fill='%23fffae0' stroke='%23805500' stroke-width='0.6'/><polyline points='1.5,4 8,8.6 14.5,4' fill='none' stroke='%23805500' stroke-width='0.4'/><circle cx='12' cy='5' r='1.6' fill='%23d8202a' stroke='%23700' stroke-width='0.3'/></svg>"); }
+
+    /* Tasks — clipboard with check */
+    .pico-task { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='2' y='2' width='12' height='13' fill='%23ffffff' stroke='%23333' stroke-width='0.6'/><rect x='5' y='1' width='6' height='2.5' fill='%23888' stroke='%23333' stroke-width='0.5'/><rect x='3.5' y='5' width='1.5' height='1.5' fill='none' stroke='%23000' stroke-width='0.5'/><polyline points='3.5,6 4.3,6.7 5.5,5' stroke='%23008000' stroke-width='1.1' fill='none'/><line x1='6.5' y1='6' x2='12.5' y2='6' stroke='%23333' stroke-width='0.5'/><rect x='3.5' y='8.2' width='1.5' height='1.5' fill='none' stroke='%23000' stroke-width='0.5'/><line x1='6.5' y1='9' x2='12.5' y2='9' stroke='%23333' stroke-width='0.5'/><rect x='3.5' y='11.4' width='1.5' height='1.5' fill='none' stroke='%23000' stroke-width='0.5'/><line x1='6.5' y1='12.2' x2='12.5' y2='12.2' stroke='%23333' stroke-width='0.5'/></svg>"); }
+
+    /* Contacts — head + shoulders silhouette */
+    .pico-contact { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='5' r='3' fill='%23f4c896' stroke='%23905a2a' stroke-width='0.5'/><path d='M1.5 15 C 1.5 9.5, 4 8.2, 8 8.2 C 12 8.2, 14.5 9.5, 14.5 15 Z' fill='%234a90d8' stroke='%23083d80' stroke-width='0.5'/></svg>"); }
+
+    /* Stack — three colorful layered diamonds */
+    .pico-stack { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><polygon points='8,1.5 14.5,5 8,8.5 1.5,5' fill='%23ffd540' stroke='%23806000' stroke-width='0.5'/><polygon points='8,5 14.5,8.5 8,12 1.5,8.5' fill='%2390d8a0' stroke='%23185a26' stroke-width='0.5'/><polygon points='8,8.5 14.5,12 8,15.5 1.5,12' fill='%234a90d8' stroke='%23083d80' stroke-width='0.5'/></svg>"); }
+
+    /* Web — blue/green globe with grid */
+    .pico-web { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6.3' fill='%2390d8e8' stroke='%23083d80' stroke-width='0.6'/><path d='M3.5 5 Q 8 4, 12.5 5' fill='none' stroke='%2306602e' stroke-width='0.5'/><path d='M2.5 9 Q 8 10, 13.5 9' fill='none' stroke='%2306602e' stroke-width='0.5'/><path d='M3.5 11.5 Q 8 13, 12.5 11.5' fill='none' stroke='%2306602e' stroke-width='0.5'/><line x1='1.7' y1='8' x2='14.3' y2='8' stroke='%23083d80' stroke-width='0.5'/><ellipse cx='8' cy='8' rx='3' ry='6.3' fill='none' stroke='%23083d80' stroke-width='0.5'/><path d='M3 4.2 Q 5 5.5, 6.5 4 L 7.5 5.5 L 9 4.5 L 10 6 L 12 5 L 13 6.5' fill='%2306a032' stroke='none'/></svg>"); }
+
+    /* Info — blue circle with white "i" */
+    .pico-info { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6.5' fill='%231a78dc' stroke='%23083d80' stroke-width='0.6'/><circle cx='8' cy='4.8' r='1.05' fill='%23ffffff'/><rect x='6.9' y='6.6' width='2.2' height='5.4' fill='%23ffffff' rx='0.3'/></svg>"); }
+
+    /* Speech bubble */
+    .pico-msg { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M1.5 3 L14.5 3 L14.5 11 L7 11 L4 14.5 L4 11 L1.5 11 Z' fill='%23ffffff' stroke='%23555' stroke-width='0.6' stroke-linejoin='round'/><circle cx='5.2' cy='7' r='0.7' fill='%23333'/><circle cx='8' cy='7' r='0.7' fill='%23333'/><circle cx='10.8' cy='7' r='0.7' fill='%23333'/></svg>"); }
+
+    /* Smiley/status — yellow face */
+    .pico-status { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6.5' fill='%23ffd540' stroke='%23806000' stroke-width='0.6'/><circle cx='5.8' cy='6.6' r='0.85' fill='%23000'/><circle cx='10.2' cy='6.6' r='0.85' fill='%23000'/><path d='M5 10 Q 8 12.4, 11 10' fill='none' stroke='%23000' stroke-width='1' stroke-linecap='round'/></svg>"); }
+
+    /* Settings / gear */
+    .pico-gear { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M8 1.5 L9 3 L11 2.5 L11 4.5 L13 5 L12.5 7 L14.5 8 L12.5 9 L13 11 L11 11.5 L11 13.5 L9 13 L8 14.5 L7 13 L5 13.5 L5 11.5 L3 11 L3.5 9 L1.5 8 L3.5 7 L3 5 L5 4.5 L5 2.5 L7 3 Z' fill='%23b8b8b8' stroke='%23404040' stroke-width='0.5' stroke-linejoin='round'/><circle cx='8' cy='8' r='2.4' fill='%23606060' stroke='%23202020' stroke-width='0.5'/><circle cx='8' cy='8' r='1' fill='%23303030'/></svg>"); }
+
+    .today-row.urgent .tr-text strong { color: var(--wm-accent); }
+    .today-row:active.urgent .tr-text strong { color: #ffe040; }
+    /* Inverse mode for selected today-row — invert icon brightness slightly */
+    .today-row:active .pico { filter: brightness(1.15) saturate(1.2); }
+
+    /* ═══════════════ SUB WINDOW ═══════════════ */
+    .sub-window {
+      position: absolute;
+      inset: 0;
+      bottom: calc(var(--u) * 17);
+      background: var(--wm-bg);
+      display: none;
+      flex-direction: column;
+      z-index: 30;
+    }
+    .sub-window.open { display: flex; animation: openWin 0.15s ease-out; }
+    @keyframes openWin {
+      from { transform: translateY(8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .sub-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: calc(var(--u) * 4);
+      background: var(--wm-bg2);
+    }
+    .sub-content h2 {
+      font-size: calc(var(--u) * 11);
+      margin-bottom: calc(var(--u) * 2);
+      color: var(--wm-blue);
+      font-weight: bold;
+    }
+    .sub-content p { font-size: calc(var(--u) * 8); margin-bottom: calc(var(--u) * 2); line-height: 1.45; }
+    .sub-content .label {
+      font-weight: bold;
+      font-size: calc(var(--u) * 7);
+      margin: calc(var(--u) * 3) 0 calc(var(--u) * 1);
+      padding-bottom: calc(var(--u) * 0.5);
+      border-bottom: calc(var(--u) * 1) solid var(--wm-dark);
+      color: var(--wm-darker);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .sub-content a {
+      color: var(--wm-link);
+      text-decoration: underline;
+      font-size: calc(var(--u) * 8);
+      display: block;
+      padding: calc(var(--u) * 1.5) 0;
+    }
+    .sub-content a:visited { color: #4a1979; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: calc(var(--u) * 2); margin-top: calc(var(--u) * 1); }
+    .tag {
+      background: #fff;
+      border: calc(var(--u) * 1) solid var(--wm-dark);
+      padding: calc(var(--u) * 0.5) calc(var(--u) * 2);
+      font-size: calc(var(--u) * 7);
+      border-radius: calc(var(--u) * 1);
+    }
+
+    /* ═══════════════ SOFT MENU BAR (bottom of WM2003) ═══════════════ */
+    .soft-bar {
+      flex-shrink: 0;
+      height: calc(var(--u) * 16);
+      background: linear-gradient(180deg, var(--wm-task) 0%, var(--wm-task-end) 100%);
+      display: flex;
+      align-items: stretch;
+      border-top: calc(var(--u) * 1) solid rgba(0,0,0,0.3);
+      color: #fff;
+      font-size: calc(var(--u) * 7);
+    }
+    .soft-btn {
+      flex: 1;
+      display: flex; align-items: center; justify-content: center;
+      gap: calc(var(--u) * 2);
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: inherit;
+      font-size: calc(var(--u) * 7);
+      font-weight: bold;
+      cursor: pointer;
+      padding: 0 calc(var(--u) * 3);
+      border-right: calc(var(--u) * 1) solid rgba(255,255,255,0.2);
+    }
+    .soft-btn:last-child { border-right: none; }
+    .soft-btn:active { background: rgba(0,0,0,0.2); }
+    .soft-keyboard {
+      width: calc(var(--u) * 22);
+      flex: 0 0 auto;
+      background: linear-gradient(180deg, #6b97d8, #325ec0);
+      display: inline-flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: calc(var(--u) * 9);
+      border-right: calc(var(--u) * 1) solid rgba(255,255,255,0.2);
+      cursor: pointer;
+    }
+
+    /* ═══════════════ START MENU POPUP ═══════════════ */
+    .start-menu {
+      position: absolute;
+      top: calc(var(--u) * 16);
+      left: 0;
+      width: calc(var(--u) * 130);
+      background: var(--wm-bg2);
+      border: calc(var(--u) * 1) solid var(--wm-darker);
+      box-shadow: calc(var(--u) * 2) calc(var(--u) * 2) calc(var(--u) * 3) rgba(0,0,0,0.4);
+      display: none;
+      z-index: 60;
+      padding: calc(var(--u) * 1) 0;
+    }
+    .start-menu.open { display: block; }
+    .sm-item {
+      display: flex; align-items: center; gap: calc(var(--u) * 3);
+      padding: calc(var(--u) * 2) calc(var(--u) * 3);
+      font-size: calc(var(--u) * 8);
+      cursor: pointer;
+      color: var(--wm-text);
+    }
+    .sm-item:active, .sm-item:hover {
+      background: var(--wm-tb1);
+      color: #fff;
+    }
+    .sm-item:active .pico, .sm-item:hover .pico { background: #fff; }
+    .sm-divider {
+      height: calc(var(--u) * 1);
+      background: var(--wm-dark);
+      margin: calc(var(--u) * 1) calc(var(--u) * 2);
+    }
+
+    /* ═══════════════ BELOW SCREEN: iPAQ branding + buttons ═══════════════ */
+    .ipaq-brand {
+      position: absolute;
+      top: calc(var(--u) * 336);
+      left: 0; right: 0;
+      text-align: center;
+      font-family: 'Times New Roman', serif;
+      font-style: italic;
+      font-weight: bold;
+      font-size: calc(var(--u) * 10);
+      color: var(--body-edge);
+      letter-spacing: 0.02em;
+      text-shadow: 0 calc(var(--u) * 1) 0 rgba(255,255,255,0.5);
+    }
+    .ipaq-brand .i { color: #0066cc; }
+
+    /* Hardware button cluster (4 app buttons + 5-way d-pad center) */
+    .hw-area {
+      position: absolute;
+      top: calc(var(--u) * 358);
+      left: 0; right: 0;
+      height: calc(var(--u) * 80);
+      display: grid;
+      grid-template-columns: 1fr calc(var(--u) * 70) 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: calc(var(--u) * 4);
+      padding: 0 calc(var(--u) * 22);
+      align-items: center;
+      justify-items: center;
+    }
+
+    .app-btn {
+      width: calc(var(--u) * 38);
+      height: calc(var(--u) * 28);
+      background:
+        linear-gradient(180deg, var(--body-1) 0%, var(--body-3) 100%);
+      border: none;
+      border-radius: calc(var(--u) * 14);
+      cursor: pointer;
+      box-shadow:
+        inset 0 calc(var(--u) * 1) 0 rgba(255,255,255,0.6),
+        inset 0 calc(var(--u) * -1) 0 rgba(0,0,0,0.4),
+        0 calc(var(--u) * 2) calc(var(--u) * 2) rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-family: inherit;
+      transition: transform 0.06s, filter 0.06s;
+      position: relative;
+    }
+    .app-btn:active { transform: translateY(1px); filter: brightness(1.1); }
+    .app-btn .pico { width: calc(var(--u) * 18); height: calc(var(--u) * 18); }
+
+    /* Grid positions */
+    .btn-cal     { grid-column: 1; grid-row: 1; justify-self: end; }
+    .btn-contact { grid-column: 3; grid-row: 1; justify-self: start; }
+    .btn-mail    { grid-column: 1; grid-row: 2; justify-self: end; }
+    .btn-home    { grid-column: 3; grid-row: 2; justify-self: start; }
+
+    /* 5-way D-pad in center */
+    .dpad {
+      grid-column: 2; grid-row: 1 / span 2;
+      position: relative;
+      width: calc(var(--u) * 70);
+      height: calc(var(--u) * 70);
+      align-self: center;
+    }
+    .dpad-base {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 35% 35%, var(--body-1), var(--body-3) 75%, var(--body-4) 100%);
+      border-radius: 50%;
+      box-shadow:
+        inset 0 calc(var(--u) * 1.5) 0 rgba(255,255,255,0.5),
+        inset 0 calc(var(--u) * -2) 0 rgba(0,0,0,0.4),
+        0 calc(var(--u) * 2) calc(var(--u) * 3) rgba(0,0,0,0.4);
+    }
+    .dpad-ring {
+      position: absolute; inset: 14%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--body-2), var(--body-4) 80%);
+      box-shadow:
+        inset 0 calc(var(--u) * 1) 0 rgba(255,255,255,0.35),
+        inset 0 calc(var(--u) * -1) 0 rgba(0,0,0,0.3);
+    }
+    .dpad-center {
+      position: absolute;
+      width: 36%; height: 36%;
+      top: 32%; left: 32%;
+      background: radial-gradient(circle at 30% 30%, var(--body-1), var(--body-3) 70%);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow:
+        inset 0 calc(var(--u) * 1) 0 rgba(255,255,255,0.5),
+        inset 0 calc(var(--u) * -1) 0 rgba(0,0,0,0.5);
+      transition: filter 0.06s, transform 0.06s;
+    }
+    .dpad-center:active { transform: translateY(1px); filter: brightness(1.1); }
+    .dpad-arrow {
+      position: absolute;
+      color: var(--body-edge);
+      font-size: calc(var(--u) * 11);
+      font-weight: bold;
+      cursor: pointer;
+      width: 32%; height: 32%;
+      display: flex; align-items: center; justify-content: center;
+      text-shadow: 0 calc(var(--u) * 1) 0 rgba(255,255,255,0.4);
+    }
+    .dpad-arrow:active { color: var(--wm-blue); }
+    .dpad-up    { top: 0; left: 34%; }
+    .dpad-down  { bottom: 0; left: 34%; }
+    .dpad-left  { left: 0; top: 34%; }
+    .dpad-right { right: 0; top: 34%; }
+
+    /* hp logo at bottom */
+    .hp-bottom {
+      position: absolute;
+      bottom: calc(var(--u) * 8);
+      left: 50%;
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: calc(var(--u) * 3);
+    }
+    .hp-bottom .hp-mark {
+      width: calc(var(--u) * 14);
+      height: calc(var(--u) * 14);
+      border: calc(var(--u) * 1.5) solid var(--body-edge);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--body-edge);
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+      font-size: calc(var(--u) * 7);
+      letter-spacing: -0.06em;
+    }
+    .hp-bottom .hp-text {
+      font-family: 'Arial', sans-serif;
+      font-size: calc(var(--u) * 5);
+      color: var(--body-edge);
+      letter-spacing: 0.15em;
+    }
+  </style>
+</head>
+<body>
+
+<div class="device" id="device">
+
+  <!-- TOP -->
+  <div class="power-btn"></div>
+  <div class="stylus"></div>
+  <div class="top-bezel">
+    <div class="hp-logo">hp</div>
+    <div class="top-leds">
+      <div class="led on-amber"></div>
+      <div class="led on-green"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN HOUSING -->
+  <div class="screen-housing">
+    <div class="lcd">
+
+      <!-- WM2003 Top bar (Start | Title | status icons) -->
+      <div class="wm-tb">
+        <button class="wm-start" id="start-btn">
+          <span class="wm-flag"><span></span><span></span><span></span><span></span></span>
+          Start
+        </button>
+        <span class="wm-tb-title" id="window-title">Today</span>
+        <div class="wm-tb-status">
+          <span class="ic ic-signal"></span>
+          <span class="ic ic-batt"></span>
+          <span class="wm-tb-clock" id="tb-clock">10:24</span>
+        </div>
+      </div>
+
+      <!-- Start menu -->
+      <div class="start-menu" id="start-menu">
+        <div class="sm-item" data-open="about"><span class="pico pico-info"></span>About</div>
+        <div class="sm-item" data-open="work"><span class="pico pico-cal"></span>Work</div>
+        <div class="sm-item" data-open="stack"><span class="pico pico-stack"></span>Tech Stack</div>
+        <div class="sm-item" data-open="contact"><span class="pico pico-contact"></span>Contact</div>
+        <div class="sm-divider"></div>
+        <div class="sm-item" data-open="desktop"><span class="pico pico-web"></span>Desktop site</div>
+        <div class="sm-item" data-open="shutdown"><span class="pico pico-msg"></span>Shut Down...</div>
+      </div>
+
+      <!-- Today screen -->
+      <div class="today" id="today">
+
+        <div class="today-banner">
+          <div class="banner-icon">D</div>
+          <div>
+            <div class="banner-name">Derrick Fink</div>
+            <div class="banner-date" id="banner-date">Wednesday, May 13</div>
+          </div>
+        </div>
+
+        <div class="today-list">
+          <div class="today-row" data-open="about">
+            <span class="tr-ico"><span class="pico pico-info"></span></span>
+            <div class="tr-text">
+              <strong>About</strong>
+              <small>Software Engineer · BSU</small>
+            </div>
+          </div>
+
+          <div class="today-row urgent" data-open="contact">
+            <span class="tr-ico"><span class="pico pico-mail"></span></span>
+            <div class="tr-text">
+              <strong>Inbox: 3 ways to reach me</strong>
+              <small>Email · GitHub · LinkedIn</small>
+            </div>
+          </div>
+
+          <div class="today-row" data-open="work">
+            <span class="tr-ico"><span class="pico pico-cal"></span></span>
+            <div class="tr-text">
+              <strong>Calendar: 3 active projects</strong>
+              <small>BSU · AWS · ML</small>
+            </div>
+          </div>
+
+          <div class="today-row" data-open="stack">
+            <span class="tr-ico"><span class="pico pico-stack"></span></span>
+            <div class="tr-text">
+              <strong>Tech Stack</strong>
+              <small>AWS · Python · ML</small>
+            </div>
+          </div>
+
+          <div class="today-row" data-open="status">
+            <span class="tr-ico"><span class="pico pico-task"></span></span>
+            <div class="tr-text">
+              <strong>Tasks: 1 in progress</strong>
+              <small>🟡 Away — Building BSU's digital experience</small>
+            </div>
+          </div>
+
+          <div class="today-row" data-open="desktop">
+            <span class="tr-ico"><span class="pico pico-web"></span></span>
+            <div class="tr-text">
+              <strong>Desktop site (Win95)</strong>
+              <small>Open the full experience →</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sub window -->
+      <div class="sub-window" id="sub-window">
+        <div class="sub-content" id="sub-content"></div>
+      </div>
+
+      <!-- Soft menu bar -->
+      <div class="soft-bar">
+        <button class="soft-btn" id="soft-new">New</button>
+        <span class="soft-keyboard" id="soft-kbd">⌨</span>
+        <button class="soft-btn" id="soft-menu">Menu</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- iPAQ branding -->
+  <div class="ipaq-brand"><span class="i">i</span>PAQ</div>
+
+  <!-- Hardware button cluster -->
+  <div class="hw-area">
+    <button class="app-btn btn-cal" data-app="work" aria-label="Calendar"><span class="pico pico-cal"></span></button>
+    <button class="app-btn btn-contact" data-app="contact" aria-label="Contacts"><span class="pico pico-contact"></span></button>
+
+    <div class="dpad">
+      <div class="dpad-base"></div>
+      <div class="dpad-ring"></div>
+      <div class="dpad-arrow dpad-up" data-dpad="up">▲</div>
+      <div class="dpad-arrow dpad-down" data-dpad="down">▼</div>
+      <div class="dpad-arrow dpad-left" data-dpad="left">◀</div>
+      <div class="dpad-arrow dpad-right" data-dpad="right">▶</div>
+      <div class="dpad-center" data-dpad="ok"></div>
+    </div>
+
+    <button class="app-btn btn-mail" data-app="contact" aria-label="Messaging"><span class="pico pico-mail"></span></button>
+    <button class="app-btn btn-home" data-app="home" aria-label="Home"><span class="pico pico-info"></span></button>
+  </div>
+
+  <!-- hp logo at bottom -->
+  <div class="hp-bottom">
+    <span class="hp-mark">hp</span>
+    <span class="hp-text">invent</span>
+  </div>
+
+</div>
+
+<script>
+  // ─────────────── CONTENT ───────────────
+  const CONTENT = {
+    about: {
+      title: 'About',
+      html: `
+        <h2>Derrick Fink</h2>
+        <p style="font-family: 'Courier New', monospace; color: var(--wm-blue);">Software Engineer · Boise State University</p>
+        <p>I build tools and systems that make a real difference — from university-wide web infrastructure to ML pipelines.</p>
+        <p>Just finished my ML grad cert. Working toward AWS Solutions Architect.</p>
+        <div class="label">Located</div>
+        <p>Boise, Idaho 🏔️</p>
+        <div class="label">Currently</div>
+        <p>Building the future of BSU's digital experience.</p>
+      `
+    },
+    work: {
+      title: 'Work',
+      html: `
+        <h2>Recent work</h2>
+        <div class="label">BSU Digital Experience</div>
+        <p>Rescued and shipped a university-wide overhaul. Voluntarily worked nights for the launch.</p>
+        <div class="label">AWS Infrastructure</div>
+        <p>Daily use of Lambda, API Gateway, Secrets Manager, Route 53.</p>
+        <div class="label">ML + AI</div>
+        <p>Grad cert complete. Applied machine learning shipped to production.</p>
+      `
+    },
+    stack: {
+      title: 'Tech Stack',
+      html: `
+        <h2>Tools &amp; languages</h2>
+        <div class="label">Cloud</div>
+        <div class="tag-list">
+          <span class="tag">AWS Lambda</span><span class="tag">API Gateway</span>
+          <span class="tag">Secrets Manager</span><span class="tag">Route 53</span>
+        </div>
+        <div class="label">Languages</div>
+        <div class="tag-list">
+          <span class="tag">Python</span><span class="tag">TypeScript</span>
+          <span class="tag">JavaScript</span><span class="tag">SQL</span>
+        </div>
+        <div class="label">ML / Data</div>
+        <div class="tag-list">
+          <span class="tag">scikit-learn</span><span class="tag">pandas</span><span class="tag">PyTorch</span>
+        </div>
+      `
+    },
+    contact: {
+      title: 'Inbox',
+      html: `
+        <h2>Get in touch</h2>
+        <p>The fastest way to reach me:</p>
+        <a href="mailto:derrick.w.fink@gmail.com">📧 derrick.w.fink@gmail.com</a>
+        <a href="https://github.com/derrickfink" target="_blank" rel="noopener">🐙 github.com/derrickfink</a>
+        <a href="https://linkedin.com/in/derrickfink" target="_blank" rel="noopener">💼 linkedin.com/in/derrickfink</a>
+        <div class="label">AIM</div>
+        <p style="font-family: 'Courier New', monospace;">🟡 <strong>derrickf_bsu</strong> — Away</p>
+      `
+    },
+    status: {
+      title: 'Status',
+      html: `
+        <h2>🟡 Away</h2>
+        <p style="font-family: 'Courier New', monospace; font-size: calc(var(--u) * 8);">"Building the future of BSU's digital experience. BRB."</p>
+        <div class="label">Set by</div>
+        <p>derrickf_bsu</p>
+      `
+    },
+    desktop: { external: '/?desktop=1' },
+    home: {
+      title: 'Today',
+      html: `
+        <h2>You're already home</h2>
+        <p>This <em>is</em> the Today screen. Tap any item to open it.</p>
+        <p style="margin-top: 1em;">Try the <strong>Calendar</strong> button on the hardware below for upcoming work,
+        or the <strong>Mail</strong> button for contact info.</p>
+      `
+    },
+    shutdown: {
+      title: 'Shut Down',
+      html: `
+        <h2 style="text-align:center;">It's now safe to power off your Pocket PC.</h2>
+        <p style="text-align:center; margin-top: 2em;">(refresh to come back)</p>
+      `
+    }
+  };
+
+  // ─────────────── ELEMENTS ───────────────
+  const startBtn  = document.getElementById('start-btn');
+  const startMenu = document.getElementById('start-menu');
+  const subWin    = document.getElementById('sub-window');
+  const subContent= document.getElementById('sub-content');
+  const winTitle  = document.getElementById('window-title');
+  const todayEl   = document.getElementById('today');
+
+  // ─────────────── OPEN / CLOSE WINDOWS ───────────────
+  function openItem(key){
+    const c = CONTENT[key];
+    if (!c) return;
+    if (c.external) { window.location.href = c.external; return; }
+    subContent.innerHTML = c.html;
+    subWin.classList.add('open');
+    winTitle.textContent = c.title;
+    closeStartMenu();
+  }
+  function closeSub(){
+    subWin.classList.remove('open');
+    winTitle.textContent = 'Today';
+  }
+
+  document.querySelectorAll('[data-open]').forEach(el => {
+    el.addEventListener('click', () => openItem(el.dataset.open));
+  });
+
+  // ─────────────── START MENU ───────────────
+  function closeStartMenu(){ startMenu.classList.remove('open'); }
+  startBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    startMenu.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!startMenu.contains(e.target) && e.target !== startBtn) closeStartMenu();
+  });
+
+  // ─────────────── SOFT MENU BUTTONS ───────────────
+  document.getElementById('soft-new').addEventListener('click', () => openItem('contact'));
+  document.getElementById('soft-menu').addEventListener('click', () => {
+    if (subWin.classList.contains('open')) closeSub();
+    else startBtn.click();
+  });
+  document.getElementById('soft-kbd').addEventListener('click', () => {
+    // No keyboard in this build — just bounce the soft menu visually
+    document.getElementById('soft-kbd').animate(
+      [{ filter: 'brightness(1.4)' }, { filter: 'brightness(1)' }],
+      { duration: 200 }
+    );
+  });
+
+  // ─────────────── D-PAD ───────────────
+  function activeScroll(){
+    return subWin.classList.contains('open') ? subContent : todayEl;
+  }
+  document.querySelectorAll('[data-dpad]').forEach(el => {
+    el.addEventListener('click', () => {
+      const dir = el.dataset.dpad;
+      const s = activeScroll();
+      const step = s.clientHeight * 0.5;
+      if (dir === 'up')    s.scrollBy({ top: -step, behavior: 'smooth' });
+      if (dir === 'down')  s.scrollBy({ top:  step, behavior: 'smooth' });
+      if (dir === 'left')  closeSub();
+      if (dir === 'right') { /* future: forward nav */ }
+      if (dir === 'ok')    {
+        if (subWin.classList.contains('open')) closeSub();
+        else openItem('about');
+      }
+    });
+  });
+
+  // ─────────────── HARDWARE APP BUTTONS ───────────────
+  document.querySelectorAll('[data-app]').forEach(b => {
+    b.addEventListener('click', () => openItem(b.dataset.app));
+  });
+
+  // ─────────────── CLOCK ───────────────
+  function tick(){
+    const d = new Date();
+    let h = d.getHours();
+    const ampm = h >= 12 ? 'pm' : 'am';
+    h = h % 12 || 12;
+    const m = String(d.getMinutes()).padStart(2, '0');
+    document.getElementById('tb-clock').textContent = `${h}:${m}${ampm}`;
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const mons = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('banner-date').textContent = `${days[d.getDay()]}, ${mons[d.getMonth()]} ${d.getDate()}`;
+  }
+  tick();
+  setInterval(tick, 30000);
+
+  // ─────────────── FIT ───────────────
+  function fit(){
+    const designW = 280, designH = 460;
+    const margin = 16;
+    const vw = window.innerWidth - margin;
+    const vh = window.innerHeight - margin;
+    const u = Math.min(vw / designW, vh / designH);
+    document.documentElement.style.setProperty('--u', u + 'px');
+  }
+  fit();
+  window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', fit);
+</script>
+</body>
+</html>
