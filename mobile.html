@@ -3,699 +3,404 @@
 <head>
   <title>Derrick Fink</title>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#000000">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#141517">
   <style>
-    :root {
-      --magenta: #E20074;
-      --magenta-dark: #a8004f;
-      --bg: #0a0a0a;
-      --surface: #161616;
-      --border: #2a2a2a;
-      --text: #f0f0f0;
-      --muted: #777;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden;background:#141517;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+    body{position:fixed;inset:0}
+
+    /* ── Portrait nag ── */
+    #nag{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:3vmin;background:radial-gradient(circle at 50% 35%,#1d1f22,#0c0d0e);color:#eaeaea;text-align:center;padding:6vmin}
+    #nag .ph{width:14vmin;height:25vmin;border:0.9vmin solid #8d9298;border-radius:2.2vmin;position:relative;animation:tilt 2.6s ease-in-out infinite}
+    #nag .ph::before{content:'';position:absolute;left:50%;top:1.4vmin;transform:translateX(-50%);width:3.4vmin;height:0.7vmin;background:#8d9298;border-radius:0.5vmin}
+    #nag .ph::after{content:'';position:absolute;left:50%;bottom:1.2vmin;transform:translateX(-50%);width:2.4vmin;height:2.4vmin;border:0.5vmin solid #8d9298;border-radius:50%}
+    @keyframes tilt{0%,32%{transform:rotate(0)}55%,82%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
+    #nag h1{font-size:5.4vmin;font-weight:700;color:#fff}
+    #nag .tm{font-size:3vmin;font-weight:800;letter-spacing:0.4vmin;color:#E20074;text-transform:uppercase}
+    #nag p{font-size:3.1vmin;color:#888;max-width:60vmin;line-height:1.5}
+
+    /* ── Stage / device ── */
+    #stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 38%,#26292d,#121315)}
+    #device{
+      --u:1.6vmin;
+      position:relative;width:80vmin;height:47vmin;
+      filter:drop-shadow(0 calc(var(--u)*1.4) calc(var(--u)*2.4) rgba(0,0,0,.5));
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* base plate */
+    .base{position:absolute;left:0;top:30%;width:100%;height:70%;border-radius:calc(var(--u)*3.4);
+      background:linear-gradient(150deg,#d4d8dc,#9aa0a6 42%,#c0c5ca 64%,#8e9298);
+      box-shadow:inset 0 calc(var(--u)*0.5) 0 rgba(255,255,255,.4),inset 0 calc(var(--u)*-0.6) calc(var(--u)*1) rgba(0,0,0,.18),inset 0 0 0 calc(var(--u)*0.15) rgba(0,0,0,.12);
+      z-index:1}
 
-    html, body {
-      height: 100%;
-      overflow: hidden;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      -webkit-text-size-adjust: 100%;
-      touch-action: manipulation;
-    }
+    /* screen module */
+    .mod{position:absolute;left:11%;top:0;width:78%;height:66%;border-radius:calc(var(--u)*3.2);
+      background:linear-gradient(150deg,#c3c8cd,#8b9197 46%,#aeb3b9 66%,#80868c);
+      box-shadow:inset 0 calc(var(--u)*0.5) 0 rgba(255,255,255,.38),inset 0 calc(var(--u)*-0.5) calc(var(--u)*0.9) rgba(0,0,0,.22),0 calc(var(--u)*0.5) calc(var(--u)*1.4) rgba(0,0,0,.3);
+      z-index:3}
 
-    body {
-      display: flex;
-      flex-direction: column;
-      height: 100dvh;
-    }
+    /* shoulder buttons */
+    .sh{position:absolute;top:1%;width:9%;height:10%;border-radius:calc(var(--u)*1.2);
+      background:linear-gradient(180deg,#54585e,#2c2f34);
+      box-shadow:inset 0 calc(var(--u)*0.15) 0 rgba(255,255,255,.18),0 calc(var(--u)*0.12) calc(var(--u)*0.3) rgba(0,0,0,.4);cursor:pointer}
+    .shL{left:4%}.shR{left:87%}
+    .sh.press{transform:translateY(calc(var(--u)*0.12));filter:brightness(.8)}
 
-    /* ── Status Bar ── */
-    .status-bar {
-      background: #000;
-      height: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 10px;
-      flex-shrink: 0;
-    }
+    /* camera dot */
+    .cam{position:absolute;left:49.2%;top:2.4%;width:calc(var(--u)*1.3);height:calc(var(--u)*1.3);border-radius:50%;
+      background:radial-gradient(circle at 35% 30%,#3b4046,#0c0d0f 70%);box-shadow:0 0 0 calc(var(--u)*0.18) rgba(0,0,0,.25)}
 
-    .carrier-name {
-      color: var(--magenta);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
+    /* module side buttons */
+    .mbtn{position:absolute;background:linear-gradient(180deg,#55595f,#2c2f34);border-radius:calc(var(--u)*0.9);
+      display:flex;align-items:center;justify-content:center;color:#cfd3d8;font-size:calc(var(--u)*1.6);
+      box-shadow:inset 0 calc(var(--u)*0.14) 0 rgba(255,255,255,.16),0 calc(var(--u)*0.1) calc(var(--u)*0.26) rgba(0,0,0,.4);cursor:pointer}
+    .mbtn.press{transform:translateY(calc(var(--u)*0.1));filter:brightness(.8)}
+    .b-menu{left:2%;top:15%;width:11.5%;height:17%}
+    .b-jump{left:86.5%;top:15%;width:11.5%;height:17%;color:#E20074;font-weight:700}
 
-    .status-right {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    /* bezel branding */
+    .tm-logo{position:absolute;left:1.5%;top:74%;width:15%;height:7%;display:flex;align-items:center;justify-content:center;
+      font-size:calc(var(--u)*1.05);font-weight:800;letter-spacing:.05em;color:#3a3d42}
+    .tm-logo b{color:#E20074}
+    .sk-logo{position:absolute;left:84.5%;top:40%;width:13%;height:36%;display:flex;align-items:center;justify-content:center;
+      writing-mode:vertical-rl;text-orientation:mixed;font-size:calc(var(--u)*1.15);font-weight:600;letter-spacing:.18em;color:#3a3d42}
 
-    .signal {
-      display: flex;
-      align-items: flex-end;
-      gap: 1.5px;
-      height: 11px;
-    }
+    /* LCD */
+    .lcd{position:absolute;left:17%;top:8%;width:66%;height:84%;background:#000;border-radius:calc(var(--u)*0.7);overflow:hidden;
+      box-shadow:0 0 0 calc(var(--u)*0.55) #1c1d1f,inset 0 0 calc(var(--u)*1.6) rgba(0,0,0,.85)}
+    .lcd::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.07),rgba(255,255,255,0) 32%);z-index:30}
 
-    .signal span {
-      display: block;
-      width: 2.5px;
-      background: var(--magenta);
-      border-radius: 1px 1px 0 0;
-    }
-    .signal span:nth-child(1) { height: 3px; }
-    .signal span:nth-child(2) { height: 5px; }
-    .signal span:nth-child(3) { height: 7px; }
-    .signal span:nth-child(4) { height: 9px; }
-    .signal span:nth-child(5) { height: 11px; }
+    /* ── OS inside LCD ── */
+    .os{position:absolute;inset:0;display:flex;flex-direction:column;color:#ededed;background:#0a0a0a}
+    .os a{color:inherit;text-decoration:none}
 
-    .status-clock {
-      color: #fff;
-      font-size: 10px;
-      font-weight: 500;
-      min-width: 44px;
-      text-align: right;
-    }
+    .os-bar{flex:0 0 auto;height:calc(var(--u)*2.5);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--u)*0.8);background:#000}
+    .os-carrier{font-size:calc(var(--u)*1.15);font-weight:800;letter-spacing:.12em;color:#E20074;text-transform:uppercase}
+    .os-bar-r{display:flex;align-items:center;gap:calc(var(--u)*0.6)}
+    .os-sig{display:flex;align-items:flex-end;gap:calc(var(--u)*0.18);height:calc(var(--u)*1.2)}
+    .os-sig i{display:block;width:calc(var(--u)*0.3);background:#E20074;border-radius:1px 1px 0 0}
+    .os-sig i:nth-child(1){height:30%}.os-sig i:nth-child(2){height:48%}.os-sig i:nth-child(3){height:66%}.os-sig i:nth-child(4){height:84%}.os-sig i:nth-child(5){height:100%}
+    .os-clock{font-size:calc(var(--u)*1.1);color:#fff;font-weight:500}
+    .os-bat{width:calc(var(--u)*2);height:calc(var(--u)*1);border:calc(var(--u)*0.16) solid #9aa0a6;border-radius:calc(var(--u)*0.2);padding:calc(var(--u)*0.14);position:relative}
+    .os-bat::after{content:'';position:absolute;right:calc(var(--u)*-0.34);top:50%;transform:translateY(-50%);width:calc(var(--u)*0.22);height:40%;background:#9aa0a6;border-radius:0 1px 1px 0}
+    .os-bat b{display:block;height:100%;width:72%;background:#4dbe5d;border-radius:1px}
 
-    .battery {
-      width: 18px;
-      height: 9px;
-      border: 1.5px solid #888;
-      border-radius: 2px;
-      position: relative;
-      display: flex;
-      align-items: stretch;
-      padding: 1.5px;
-    }
+    .os-titlebar{flex:0 0 auto;height:calc(var(--u)*2.3);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--u)*0.9);
+      background:linear-gradient(180deg,#27272a,#161618);border-bottom:calc(var(--u)*0.22) solid #E20074}
+    .os-title{flex:1;text-align:center;font-size:calc(var(--u)*1.5);font-weight:600;color:#fff}
+    .os-nav{font-size:calc(var(--u)*2);line-height:1;color:#E20074;padding:0 calc(var(--u)*0.5);cursor:pointer}
+    .os-nav.dim{color:#2b2b2b;pointer-events:none}
 
-    .battery::after {
-      content: '';
-      position: absolute;
-      right: -4px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 2.5px;
-      height: 4px;
-      background: #888;
-      border-radius: 0 1px 1px 0;
-    }
+    .os-body{flex:1 1 auto;position:relative;overflow:hidden;min-height:0}
+    .os-screens{display:flex;height:100%;transition:transform .28s cubic-bezier(.25,.46,.45,.94);will-change:transform}
+    .os-screen{min-width:100%;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:calc(var(--u)*1.7) calc(var(--u)*1.6) calc(var(--u)*1)}
 
-    .battery-fill {
-      background: #4dbe5d;
-      flex: 1;
-      border-radius: 1px;
-    }
+    .os-foot{flex:0 0 auto;height:calc(var(--u)*1.9);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*0.7);background:#000}
+    .os-foot i{width:calc(var(--u)*0.5);height:calc(var(--u)*0.5);border-radius:50%;background:#2d2d2d;transition:.2s}
+    .os-foot i.on{background:#E20074;transform:scale(1.35)}
 
-    /* ── App Bar ── */
-    .app-bar {
-      background: linear-gradient(180deg, #252525 0%, #161616 100%);
-      border-bottom: 2px solid var(--magenta);
-      height: 38px;
-      display: flex;
-      align-items: center;
-      padding: 0 6px;
-      flex-shrink: 0;
-      gap: 4px;
-    }
+    /* Home screen */
+    .os-home{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center}
+    .oh-time{font-size:calc(var(--u)*7.5);font-weight:100;color:#fff;letter-spacing:-.04em;line-height:1}
+    .oh-ap{font-size:calc(var(--u)*1.7);color:#777;letter-spacing:.1em;margin-top:calc(var(--u)*0.2)}
+    .oh-date{font-size:calc(var(--u)*1.4);color:#777;margin-top:calc(var(--u)*0.6)}
+    .oh-div{width:calc(var(--u)*5.5);height:calc(var(--u)*0.2);background:#E20074;opacity:.75;margin:calc(var(--u)*2) 0 calc(var(--u)*1.6)}
+    .oh-name{font-size:calc(var(--u)*2.7);font-weight:700;color:#fff}
+    .oh-handle{font-size:calc(var(--u)*1.4);color:#E20074;margin-top:calc(var(--u)*0.3);letter-spacing:.03em}
 
-    .app-bar-title {
-      flex: 1;
-      font-size: 13px;
-      font-weight: 600;
-      color: #fff;
-      text-align: center;
-      letter-spacing: 0.3px;
-    }
+    /* Cards */
+    .card{background:#161616;border:1px solid #2a2a2a;border-radius:calc(var(--u)*1.4);padding:calc(var(--u)*1.5) calc(var(--u)*1.7);margin-bottom:calc(var(--u)*1.1)}
+    .ck-l{font-size:calc(var(--u)*1.05);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#E20074;margin-bottom:calc(var(--u)*0.7)}
+    .ck-b{font-size:calc(var(--u)*1.55);line-height:1.6;color:#d7d7d7}
 
-    .nav-btn {
-      color: var(--magenta);
-      font-size: 26px;
-      line-height: 1;
-      padding: 2px 8px;
-      cursor: pointer;
-      border-radius: 4px;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      transition: opacity 0.15s;
-    }
+    /* Skills */
+    .sk-row{display:flex;align-items:center;gap:calc(var(--u)*1);margin-bottom:calc(var(--u)*1.35)}
+    .sk-n{flex:0 0 38%;font-size:calc(var(--u)*1.45);color:#cfcfcf}
+    .sk-t{flex:1;height:calc(var(--u)*0.55);background:#222;border-radius:calc(var(--u)*0.3);overflow:hidden}
+    .sk-t b{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#a8004f,#E20074);transition:width .8s cubic-bezier(.22,1,.36,1)}
+    .sk-p{flex:0 0 calc(var(--u)*4);text-align:right;font-size:calc(var(--u)*1.2);color:#777}
 
-    .nav-btn:active { opacity: 0.5; }
-    .nav-btn.dim { color: #2a2a2a; pointer-events: none; }
+    /* Currently */
+    .card.cur{padding:calc(var(--u)*0.4) calc(var(--u)*1.7)}
+    .cur-i{display:flex;gap:calc(var(--u)*1.2);align-items:flex-start;padding:calc(var(--u)*1.25) 0;border-bottom:1px solid #1d1d1d}
+    .cur-i:last-child{border-bottom:none}
+    .cur-i>i{flex:0 0 calc(var(--u)*0.65);height:calc(var(--u)*0.65);border-radius:50%;background:#E20074;margin-top:calc(var(--u)*0.6)}
+    .cur-i b{display:block;font-size:calc(var(--u)*1.55);font-weight:600;color:#e2e2e2}
+    .cur-i span{display:block;font-size:calc(var(--u)*1.25);color:#777;margin-top:calc(var(--u)*0.15)}
 
-    /* ── Screen Wrap ── */
-    .screen-wrap {
-      flex: 1;
-      overflow: hidden;
-      position: relative;
-      min-height: 0;
-    }
+    /* Contact */
+    .cx{display:flex;align-items:center;gap:calc(var(--u)*1.4);padding:calc(var(--u)*1.5) calc(var(--u)*1.6);background:#161616;border:1px solid #2a2a2a;border-radius:calc(var(--u)*1.4);margin-bottom:calc(var(--u)*1.1)}
+    .cx:active{background:#1f1f1f}
+    .cx-i{flex:0 0 calc(var(--u)*4);height:calc(var(--u)*4);border-radius:calc(var(--u)*1);background:#E20074;display:flex;align-items:center;justify-content:center;color:#fff;font-size:calc(var(--u)*1.7);font-weight:700}
+    .cx b{display:block;font-size:calc(var(--u)*1.6);font-weight:600;color:#fff}
+    .cx span{display:block;font-size:calc(var(--u)*1.2);color:#777;margin-top:calc(var(--u)*0.15)}
+    .cx em{margin-left:auto;font-style:normal;color:#3a3a3a;font-size:calc(var(--u)*2.2)}
 
-    .screens {
-      display: flex;
-      height: 100%;
-      transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      will-change: transform;
-    }
+    /* ── base controls ── */
+    .ctrl{position:absolute;cursor:pointer}
+    .ctrl.press{transform:translateY(calc(var(--u)*0.12));filter:brightness(.82)}
 
-    .screen {
-      min-width: 100%;
-      height: 100%;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
-      padding: 16px 14px 10px;
-    }
+    /* D-pad */
+    .dpad{position:absolute;left:5%;top:28%;width:12%;height:29%;border-radius:calc(var(--u)*1.4);
+      background:linear-gradient(150deg,#3a3d42,#1f2226);
+      box-shadow:inset 0 0 0 calc(var(--u)*0.18) rgba(0,0,0,.4),inset 0 calc(var(--u)*0.2) calc(var(--u)*0.5) rgba(0,0,0,.5),0 calc(var(--u)*0.14) calc(var(--u)*0.3) rgba(255,255,255,.12);
+      z-index:4}
+    .dpad::after{content:'';position:absolute;inset:18%;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,rgba(255,255,255,.05) 0 1px,rgba(0,0,0,.18) 1px 2px)}
+    .dz{position:absolute;display:flex;align-items:center;justify-content:center;color:rgba(226,0,116,.6);font-size:calc(var(--u)*1);z-index:5}
+    .dz:active{color:#E20074}
+    .dz-u{left:25%;top:0;width:50%;height:40%}
+    .dz-d{left:25%;bottom:0;width:50%;height:40%}
+    .dz-l{left:0;top:25%;width:40%;height:50%}
+    .dz-r{right:0;top:25%;width:40%;height:50%}
 
-    /* ── Dots ── */
-    .dots {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 0 4px;
-      background: var(--bg);
-      flex-shrink: 0;
-    }
+    .b-back{left:5.5%;top:62%;width:11%;height:22%;border-radius:calc(var(--u)*1);
+      background:linear-gradient(180deg,#55595f,#2c2f34);display:flex;align-items:center;justify-content:center;color:#cfd3d8;font-size:calc(var(--u)*1.7);
+      box-shadow:inset 0 calc(var(--u)*0.14) 0 rgba(255,255,255,.16),0 calc(var(--u)*0.1) calc(var(--u)*0.26) rgba(0,0,0,.4);z-index:4}
 
-    .dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #2c2c2c;
-      transition: background 0.2s, transform 0.2s;
-    }
+    /* keyboard */
+    .kb{position:absolute;left:21%;top:23%;width:58%;height:58%;display:flex;flex-direction:column;justify-content:center;gap:calc(var(--u)*0.5);z-index:4}
+    .kb-row{display:flex;justify-content:center;gap:calc(var(--u)*0.5)}
+    .key{flex:1;max-width:calc(var(--u)*4);height:calc(var(--u)*2.6);border-radius:calc(var(--u)*0.7);
+      background:linear-gradient(180deg,#3a3d42,#222528);color:#c7cbd0;font-size:calc(var(--u)*1.15);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:inset 0 calc(var(--u)*0.14) 0 rgba(255,255,255,.12),0 calc(var(--u)*0.12) calc(var(--u)*0.22) rgba(0,0,0,.45)}
+    .key.alt{color:#5aa6ff}
+    .key.down{transform:translateY(calc(var(--u)*0.18));filter:brightness(.75)}
+    .key-space{flex:3;max-width:none}
+    .key-w{flex:1.6}
 
-    .dot.active {
-      background: var(--magenta);
-      transform: scale(1.3);
-    }
+    /* trackball + end */
+    .wheel{left:84%;top:30%;width:11%;height:26.6%;border-radius:50%;
+      background:radial-gradient(circle at 38% 32%,#4a4e54,#1a1c1f 72%);
+      box-shadow:inset 0 0 0 calc(var(--u)*0.2) rgba(0,0,0,.45),0 calc(var(--u)*0.14) calc(var(--u)*0.3) rgba(255,255,255,.12);z-index:4}
+    .wheel::after{content:'';position:absolute;left:24%;top:18%;width:24%;height:24%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.35),transparent 70%)}
+    .wheel.spin{animation:sp .45s ease}
+    @keyframes sp{from{transform:rotate(0)}to{transform:rotate(40deg)}}
+    .b-end{left:84.5%;top:62%;width:11%;height:22%;border-radius:calc(var(--u)*1);
+      background:linear-gradient(180deg,#55595f,#2c2f34);display:flex;align-items:center;justify-content:center;color:#cfd3d8;font-size:calc(var(--u)*1.6);
+      box-shadow:inset 0 calc(var(--u)*0.14) 0 rgba(255,255,255,.16),0 calc(var(--u)*0.1) calc(var(--u)*0.26) rgba(0,0,0,.4);z-index:4}
 
-    /* ── D-Pad ── */
-    .dpad-area {
-      background: #0d0d0d;
-      border-top: 1px solid #1e1e1e;
-      padding: 10px 0 16px;
-      flex-shrink: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .dpad {
-      position: relative;
-      width: 96px;
-      height: 96px;
-    }
-
-    .dpad-arm {
-      position: absolute;
-      background: linear-gradient(180deg, #2e2e2e 0%, #1c1c1c 100%);
-      border: 1px solid #3a3a3a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--magenta);
-      font-size: 12px;
-      cursor: pointer;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .dpad-arm:active { background: #2a1020; border-color: var(--magenta-dark); }
-
-    .dpad-up    { top:0;    left:30px; right:30px; height:30px; border-radius:8px 8px 0 0; }
-    .dpad-down  { bottom:0; left:30px; right:30px; height:30px; border-radius:0 0 8px 8px; }
-    .dpad-left  { left:0;   top:30px; bottom:30px; width:30px;  border-radius:8px 0 0 8px; }
-    .dpad-right { right:0;  top:30px; bottom:30px; width:30px;  border-radius:0 8px 8px 0; }
-
-    .dpad-center {
-      position: absolute;
-      inset: 28px;
-      background: radial-gradient(circle at 40% 35%, #3d3d3d, #1a1a1a);
-      border: 1.5px solid #3a3a3a;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 7px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      color: var(--magenta);
-      cursor: pointer;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .dpad-center:active { background: radial-gradient(circle at 40% 35%, #5a2040, #2a1020); }
-
-    /* ── Home Screen ── */
-    .home-screen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      gap: 0;
-      text-align: center;
-      padding-bottom: 20px;
-    }
-
-    .home-time {
-      font-size: 62px;
-      font-weight: 100;
-      color: #fff;
-      letter-spacing: -3px;
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-
-    .home-ampm {
-      font-size: 16px;
-      font-weight: 400;
-      letter-spacing: 1px;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-
-    .home-date {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 28px;
-    }
-
-    .home-divider {
-      width: 50px;
-      height: 1.5px;
-      background: var(--magenta);
-      opacity: 0.7;
-      margin-bottom: 20px;
-    }
-
-    .home-name {
-      font-size: 22px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-
-    .home-handle {
-      font-size: 12px;
-      color: var(--magenta);
-      letter-spacing: 0.5px;
-    }
-
-    /* ── Section Label ── */
-    .section-label {
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--magenta);
-      margin-bottom: 14px;
-    }
-
-    /* ── Card ── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 10px;
-    }
-
-    .card-label {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--magenta);
-      margin-bottom: 7px;
-    }
-
-    .card-text {
-      font-size: 13px;
-      line-height: 1.6;
-      color: #d8d8d8;
-    }
-
-    /* ── Skills ── */
-    .skill-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .skill-name {
-      width: 96px;
-      font-size: 12px;
-      color: #ccc;
-      flex-shrink: 0;
-    }
-
-    .skill-track {
-      flex: 1;
-      height: 4px;
-      background: #222;
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .skill-fill {
-      height: 100%;
-      background: linear-gradient(to right, var(--magenta-dark), var(--magenta));
-      border-radius: 2px;
-      width: 0;
-      transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    .skill-pct {
-      font-size: 10px;
-      color: var(--muted);
-      width: 28px;
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-    /* ── Status items ── */
-    .status-item {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      padding: 12px 0;
-      border-bottom: 1px solid #1c1c1c;
-    }
-
-    .status-item:last-child { border-bottom: none; }
-
-    .status-pip {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--magenta);
-      margin-top: 4px;
-      flex-shrink: 0;
-    }
-
-    .status-main {
-      font-size: 13px;
-      color: #ddd;
-      line-height: 1.4;
-    }
-
-    .status-sub {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    /* ── Contact ── */
-    .contact-link {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 10px;
-      text-decoration: none;
-      color: var(--text);
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .contact-link:active { background: #1e1e1e; }
-
-    .contact-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 9px;
-      background: var(--magenta);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-
-    .contact-label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #fff;
-    }
-
-    .contact-sub {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .contact-chevron {
-      margin-left: auto;
-      color: #333;
-      font-size: 20px;
-    }
+    .hint{position:absolute;left:0;bottom:calc(var(--u)*-2.6);width:100%;text-align:center;font-size:calc(var(--u)*1.05);color:#5a5e63;letter-spacing:.04em}
   </style>
 </head>
 <body>
 
-  <!-- Status Bar -->
-  <div class="status-bar">
-    <span class="carrier-name">T&#8209;Mobile</span>
-    <div class="status-right">
-      <div class="signal">
-        <span></span><span></span><span></span><span></span><span></span>
-      </div>
-      <span class="status-clock" id="status-clock"></span>
-      <div class="battery"><div class="battery-fill"></div></div>
-    </div>
+  <!-- Portrait nag -->
+  <div id="nag">
+    <div class="ph"></div>
+    <div class="tm">T&middot;&middot;Mobile</div>
+    <h1>Turn your phone sideways</h1>
+    <p>the Sidekick needs landscape to slide open</p>
   </div>
 
-  <!-- App Bar -->
-  <div class="app-bar">
-    <span class="nav-btn dim" id="btn-prev">&#8249;</span>
-    <span class="app-bar-title" id="bar-title">Home</span>
-    <span class="nav-btn" id="btn-next">&#8250;</span>
-  </div>
+  <!-- Stage -->
+  <div id="stage">
+    <div id="device">
 
-  <!-- Screens -->
-  <div class="screen-wrap" id="wrap">
-    <div class="screens" id="screens">
+      <!-- base plate -->
+      <div class="base"></div>
 
-      <!-- 0: Home -->
-      <div class="screen">
-        <div class="home-screen">
-          <div class="home-time" id="home-time"></div>
-          <div class="home-ampm" id="home-ampm"></div>
-          <div class="home-date" id="home-date"></div>
-          <div class="home-divider"></div>
-          <div class="home-name">Derrick Fink</div>
-          <div class="home-handle">@derrickf_bsu</div>
-        </div>
+      <!-- base: D-pad -->
+      <div class="dpad" id="dpad">
+        <div class="dz dz-u ctrl" id="dpU">&#9650;</div>
+        <div class="dz dz-d ctrl" id="dpD">&#9660;</div>
+        <div class="dz dz-l ctrl" id="dpL">&#9664;</div>
+        <div class="dz dz-r ctrl" id="dpR">&#9654;</div>
       </div>
+      <div class="b-back ctrl" id="btnBack">&#8249;</div>
 
-      <!-- 1: About -->
-      <div class="screen">
-        <div class="section-label">About</div>
-        <div class="card">
-          <div class="card-label">Who</div>
-          <div class="card-text">Software Developer III at Boise State University — 13 years building web apps, AI tooling, and cloud infrastructure for ~25,000 students, faculty, and research computing.</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Stack</div>
-          <div class="card-text">Angular &middot; .NET &middot; TypeScript &middot; AWS &middot; OpenSearch &middot; SQL Server</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Certs</div>
-          <div class="card-text">BSU ML Graduate Certificate ✓<br>AWS Solutions Architect &mdash; in progress</div>
-        </div>
-      </div>
+      <!-- base: keyboard -->
+      <div class="kb" id="kb"></div>
 
-      <!-- 2: Skills -->
-      <div class="screen" id="skills-screen">
-        <div class="section-label">Skills</div>
-      </div>
+      <!-- base: trackball + end -->
+      <div class="wheel ctrl" id="wheel"></div>
+      <div class="b-end ctrl" id="btnEnd">&#8962;</div>
 
-      <!-- 3: Currently -->
-      <div class="screen">
-        <div class="section-label">Currently</div>
-        <div class="card" style="padding: 4px 16px;">
-          <div class="status-item">
-            <div class="status-pip"></div>
-            <div>
-              <div class="status-main">Legacy app modernization</div>
-              <div class="status-sub">Boise State University</div>
+      <!-- screen module -->
+      <div class="mod">
+        <div class="cam"></div>
+        <div class="sh shL ctrl" id="shL"></div>
+        <div class="sh shR ctrl" id="shR"></div>
+        <div class="mbtn b-menu ctrl" id="btnMenu">&#9776;</div>
+        <div class="mbtn b-jump ctrl" id="btnJump">&#10006;</div>
+        <div class="tm-logo">T<b>&middot;&middot;</b>Mobile</div>
+        <div class="sk-logo">sidekick</div>
+
+        <!-- LCD -->
+        <div class="lcd" id="lcd">
+          <div class="os">
+            <div class="os-bar">
+              <span class="os-carrier">T&middot;Mobile</span>
+              <span class="os-bar-r">
+                <span class="os-sig"><i></i><i></i><i></i><i></i><i></i></span>
+                <span class="os-clock" id="osClock">12:00 PM</span>
+                <span class="os-bat"><b></b></span>
+              </span>
             </div>
-          </div>
-          <div class="status-item">
-            <div class="status-pip"></div>
-            <div>
-              <div class="status-main">AWS Solutions Architect prep</div>
-              <div class="status-sub">Q3 2026 target</div>
+            <div class="os-titlebar">
+              <span class="os-nav dim" id="osPrev">&#8249;</span>
+              <span class="os-title" id="osTitle">Home</span>
+              <span class="os-nav" id="osNext">&#8250;</span>
             </div>
-          </div>
-          <div class="status-item">
-            <div class="status-pip"></div>
-            <div>
-              <div class="status-main">SLM research</div>
-              <div class="status-sub">Small language model work</div>
+            <div class="os-body">
+              <div class="os-screens" id="osScreens">
+
+                <!-- Home -->
+                <div class="os-screen">
+                  <div class="os-home">
+                    <div class="oh-time" id="homeTime">12:00</div>
+                    <div class="oh-ap" id="homeAp">PM</div>
+                    <div class="oh-date" id="homeDate">Wednesday, May 13</div>
+                    <div class="oh-div"></div>
+                    <div class="oh-name">Derrick Fink</div>
+                    <div class="oh-handle">@derrickf_bsu</div>
+                  </div>
+                </div>
+
+                <!-- About -->
+                <div class="os-screen">
+                  <div class="card"><div class="ck-l">Who</div><div class="ck-b">Software Developer III at Boise State University &mdash; 13 years building web apps, AI tooling, and cloud infrastructure for ~25,000 students, faculty, and research computing.</div></div>
+                  <div class="card"><div class="ck-l">Stack</div><div class="ck-b">Angular &middot; .NET &middot; TypeScript &middot; AWS &middot; OpenSearch &middot; SQL Server</div></div>
+                  <div class="card"><div class="ck-l">Certs</div><div class="ck-b">BSU ML Graduate Certificate &#10003;<br>AWS Solutions Architect &mdash; in progress</div></div>
+                </div>
+
+                <!-- Skills -->
+                <div class="os-screen" id="skScreen"></div>
+
+                <!-- Currently -->
+                <div class="os-screen">
+                  <div class="card cur">
+                    <div class="cur-i"><i></i><div><b>Legacy app modernization</b><span>Boise State University</span></div></div>
+                    <div class="cur-i"><i></i><div><b>AWS Solutions Architect prep</b><span>Q3 2026 target</span></div></div>
+                    <div class="cur-i"><i></i><div><b>SLM research</b><span>small language models</span></div></div>
+                    <div class="cur-i"><i></i><div><b>Half marathon training</b><span>35% of the way there</span></div></div>
+                  </div>
+                </div>
+
+                <!-- Contact -->
+                <div class="os-screen">
+                  <a class="cx" href="https://github.com/derrickfink" target="_blank" rel="noopener"><span class="cx-i">{ }</span><div><b>GitHub</b><span>github.com/derrickfink</span></div><em>&#8250;</em></a>
+                  <a class="cx" href="https://linkedin.com/in/derrickfink" target="_blank" rel="noopener"><span class="cx-i">in</span><div><b>LinkedIn</b><span>linkedin.com/in/derrickfink</span></div><em>&#8250;</em></a>
+                  <a class="cx" href="mailto:derrick@aol.com"><span class="cx-i">&#9993;</span><div><b>Email</b><span>derrick@aol.com</span></div><em>&#8250;</em></a>
+                </div>
+
+              </div>
             </div>
-          </div>
-          <div class="status-item">
-            <div class="status-pip"></div>
-            <div>
-              <div class="status-main">Half marathon training</div>
-              <div class="status-sub">35% of the way there</div>
-            </div>
+            <div class="os-foot" id="osDots"></div>
           </div>
         </div>
       </div>
 
-      <!-- 4: Contact -->
-      <div class="screen">
-        <div class="section-label">Contact</div>
-        <a class="contact-link" href="https://github.com/derrickfink" target="_blank" rel="noopener">
-          <div class="contact-icon">&#128736;</div>
-          <div>
-            <div class="contact-label">GitHub</div>
-            <div class="contact-sub">github.com/derrickfink</div>
-          </div>
-          <span class="contact-chevron">&#8250;</span>
-        </a>
-        <a class="contact-link" href="https://linkedin.com/in/derrickfink" target="_blank" rel="noopener">
-          <div class="contact-icon">&#128101;</div>
-          <div>
-            <div class="contact-label">LinkedIn</div>
-            <div class="contact-sub">linkedin.com/in/derrickfink</div>
-          </div>
-          <span class="contact-chevron">&#8250;</span>
-        </a>
-        <a class="contact-link" href="mailto:derrick@aol.com">
-          <div class="contact-icon">&#9993;</div>
-          <div>
-            <div class="contact-label">Email</div>
-            <div class="contact-sub">derrick@aol.com</div>
-          </div>
-          <span class="contact-chevron">&#8250;</span>
-        </a>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Dots -->
-  <div class="dots" id="dots">
-    <div class="dot active"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-  </div>
-
-  <!-- D-Pad -->
-  <div class="dpad-area">
-    <div class="dpad">
-      <div class="dpad-arm dpad-up"    id="dp-up">&#9650;</div>
-      <div class="dpad-arm dpad-down"  id="dp-down">&#9660;</div>
-      <div class="dpad-arm dpad-left"  id="dp-left">&#9664;</div>
-      <div class="dpad-arm dpad-right" id="dp-right">&#9654;</div>
-      <div class="dpad-center"         id="dp-jump">JUMP</div>
+      <div class="hint">D-pad &#9664; &#9654; switch &nbsp;&middot;&nbsp; &#9650; &#9660; / wheel scroll &nbsp;&middot;&nbsp; &#10006; home</div>
     </div>
   </div>
 
   <script>
-    const TITLES = ['Home', 'About', 'Skills', 'Currently', 'Contact'];
-    const SKILLS = [
-      { name: 'TypeScript',  pct: 90 },
-      { name: 'Angular',     pct: 85 },
-      { name: 'SQL Server',  pct: 80 },
-      { name: 'AWS',         pct: 75 },
-      { name: '.NET / C#',   pct: 75 },
-      { name: 'OpenSearch',  pct: 70 },
-      { name: 'ML / AI',     pct: 65 },
-    ];
+  (function(){
+    const TITLES=['Home','About','Skills','Currently','Contact'];
+    const SKILLS=[['TypeScript',90],['Angular',85],['SQL Server',80],['AWS',75],['.NET / C#',75],['OpenSearch',70],['ML / AI',65]];
+    let cur=0, skillsDone=false;
 
-    let cur = 0;
-    let skillsAnimated = false;
+    const device=document.getElementById('device');
+    const stage=document.getElementById('stage');
+    const nag=document.getElementById('nag');
+    const screensEl=document.getElementById('osScreens');
+    const titleEl=document.getElementById('osTitle');
+    const dotsEl=document.getElementById('osDots');
 
-    // Build skill rows
-    const skillsScreen = document.getElementById('skills-screen');
-    SKILLS.forEach(s => {
-      const row = document.createElement('div');
-      row.className = 'skill-row';
-      row.innerHTML =
-        `<span class="skill-name">${s.name}</span>` +
-        `<div class="skill-track"><div class="skill-fill" data-pct="${s.pct}"></div></div>` +
-        `<span class="skill-pct">${s.pct}%</span>`;
-      skillsScreen.appendChild(row);
+    // dots
+    TITLES.forEach((_,i)=>{const d=document.createElement('i');if(i===0)d.className='on';dotsEl.appendChild(d);});
+
+    // skills rows
+    const skScreen=document.getElementById('skScreen');
+    SKILLS.forEach(([n,p])=>{
+      const r=document.createElement('div');r.className='sk-row';
+      r.innerHTML='<span class="sk-n">'+n+'</span><span class="sk-t"><b data-p="'+p+'"></b></span><span class="sk-p">'+p+'%</span>';
+      skScreen.appendChild(r);
     });
 
-    function goTo(n) {
-      n = Math.max(0, Math.min(TITLES.length - 1, n));
-      cur = n;
-      document.getElementById('screens').style.transform = `translateX(${-n * 100}%)`;
-      document.getElementById('bar-title').textContent = TITLES[n];
-      document.getElementById('btn-prev').classList.toggle('dim', n === 0);
-      document.getElementById('btn-next').classList.toggle('dim', n === TITLES.length - 1);
-      document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === n));
-      if (n === 2 && !skillsAnimated) {
-        skillsAnimated = true;
-        setTimeout(() => {
-          document.querySelectorAll('.skill-fill').forEach(el => {
-            el.style.width = el.dataset.pct + '%';
-          });
-        }, 180);
-      }
+    // keyboard
+    const kb=document.getElementById('kb');
+    [['qwertyuiop',0],['asdfghjkl',1],['zxcvbnm',2]].forEach(function(spec){
+      const row=document.createElement('div');row.className='kb-row';
+      [].forEach.call(spec[0],function(ch){const k=document.createElement('div');k.className='key';k.textContent=ch;row.appendChild(k);});
+      if(spec[1]===2){const k=document.createElement('div');k.className='key key-w';k.textContent='⌫';row.appendChild(k);}
+      kb.appendChild(row);
+    });
+    (function(){const row=document.createElement('div');row.className='kb-row';
+      row.innerHTML='<div class="key alt">sym</div><div class="key">@</div><div class="key key-space">&#9251;</div><div class="key">,</div><div class="key">.</div><div class="key key-w">&#9166;</div>';
+      kb.appendChild(row);})();
+    kb.addEventListener('pointerdown',function(e){const k=e.target.closest('.key');if(k){k.classList.add('down');setTimeout(function(){k.classList.remove('down');},120);}});
+
+    function go(n){
+      n=Math.max(0,Math.min(TITLES.length-1,n));cur=n;
+      screensEl.style.transform='translateX('+(-n*100)+'%)';
+      titleEl.textContent=TITLES[n];
+      document.getElementById('osPrev').classList.toggle('dim',n===0);
+      document.getElementById('osNext').classList.toggle('dim',n===TITLES.length-1);
+      [].forEach.call(dotsEl.children,function(d,i){d.classList.toggle('on',i===n);});
+      if(n===2&&!skillsDone){skillsDone=true;setTimeout(function(){document.querySelectorAll('.sk-t b').forEach(function(b){b.style.width=b.dataset.p+'%';});},220);}
     }
+    function scrollCur(dy){screensEl.children[cur].scrollBy({top:dy,behavior:'smooth'});}
 
-    function scrollCurrent(delta) {
-      document.querySelectorAll('.screen')[cur].scrollBy({ top: delta, behavior: 'smooth' });
+    function tap(id,fn){const el=document.getElementById(id);if(el)el.addEventListener('click',function(e){e.preventDefault();fn();});}
+    tap('shL',function(){go(cur-1);});tap('shR',function(){go(cur+1);});
+    tap('btnMenu',function(){go(cur+1);});tap('btnJump',function(){go(0);});
+    tap('btnBack',function(){go(cur-1);});tap('btnEnd',function(){go(0);});
+    tap('dpL',function(){go(cur-1);});tap('dpR',function(){go(cur+1);});
+    tap('dpU',function(){scrollCur(-72);});tap('dpD',function(){scrollCur(72);});
+    tap('osPrev',function(){go(cur-1);});tap('osNext',function(){go(cur+1);});
+
+    const wheel=document.getElementById('wheel');
+    wheel.addEventListener('click',function(e){
+      const r=wheel.getBoundingClientRect();
+      scrollCur(e.clientY<r.top+r.height/2?-72:72);
+      wheel.classList.remove('spin');void wheel.offsetWidth;wheel.classList.add('spin');
+    });
+
+    // press feedback
+    document.querySelectorAll('.ctrl').forEach(function(el){
+      el.addEventListener('pointerdown',function(){el.classList.add('press');});
+      ['pointerup','pointerleave','pointercancel'].forEach(function(ev){el.addEventListener(ev,function(){el.classList.remove('press');});});
+    });
+
+    // swipe on LCD
+    const lcd=document.getElementById('lcd');let sx=null,sy=null;
+    lcd.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+    lcd.addEventListener('touchend',function(e){
+      if(sx==null)return;
+      const dx=sx-e.changedTouches[0].clientX, dy=sy-e.changedTouches[0].clientY;
+      if(Math.abs(dx)>28&&Math.abs(dx)>Math.abs(dy))go(cur+(dx>0?1:-1));
+      sx=sy=null;
+    },{passive:true});
+
+    // orientation / fit
+    function layout(){
+      const w=window.innerWidth,h=window.innerHeight;
+      if(h>w){nag.style.display='flex';stage.style.display='none';return;}
+      nag.style.display='none';stage.style.display='flex';
+      const ratio=1.7;let dw,dh;
+      if(w/h>ratio){dh=h*0.965;dw=dh*ratio;}else{dw=w*0.985;dh=dw/ratio;}
+      device.style.width=dw+'px';device.style.height=dh+'px';
+      device.style.setProperty('--u',(dw/100)+'px');
     }
+    window.addEventListener('resize',layout);
+    window.addEventListener('orientationchange',function(){setTimeout(layout,160);});
+    layout();
 
-    document.getElementById('btn-prev').addEventListener('click', () => goTo(cur - 1));
-    document.getElementById('btn-next').addEventListener('click', () => goTo(cur + 1));
-    document.getElementById('dp-left').addEventListener('click', () => goTo(cur - 1));
-    document.getElementById('dp-right').addEventListener('click', () => goTo(cur + 1));
-    document.getElementById('dp-up').addEventListener('click', () => scrollCurrent(-80));
-    document.getElementById('dp-down').addEventListener('click', () => scrollCurrent(80));
-    document.getElementById('dp-jump').addEventListener('click', () => goTo(0));
-
-    // Touch swipe
-    let tx = 0;
-    const wrap = document.getElementById('wrap');
-    wrap.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-    wrap.addEventListener('touchend', e => {
-      const dx = tx - e.changedTouches[0].clientX;
-      if (Math.abs(dx) > 44) goTo(cur + (dx > 0 ? 1 : -1));
-    }, { passive: true });
-
-    // Clock
-    const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-    function tick() {
-      const now = new Date();
-      const h = now.getHours();
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const ampm = h >= 12 ? 'PM' : 'AM';
-      const h12 = String((h % 12) || 12);
-      document.getElementById('status-clock').textContent = h12 + ':' + m + ' ' + ampm;
-      document.getElementById('home-time').textContent = h12 + ':' + m;
-      document.getElementById('home-ampm').textContent = ampm;
-      document.getElementById('home-date').textContent =
-        DAYS[now.getDay()] + ', ' + MONTHS[now.getMonth()] + ' ' + now.getDate();
+    // clock
+    const D=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const M=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    function tick(){
+      const n=new Date(),hh=n.getHours(),mm=String(n.getMinutes()).padStart(2,'0'),ap=hh>=12?'PM':'AM',h12=String((hh%12)||12);
+      document.getElementById('osClock').textContent=h12+':'+mm+' '+ap;
+      document.getElementById('homeTime').textContent=h12+':'+mm;
+      document.getElementById('homeAp').textContent=ap;
+      document.getElementById('homeDate').textContent=D[n.getDay()]+', '+M[n.getMonth()]+' '+n.getDate();
     }
-    tick();
-    setInterval(tick, 1000);
+    tick();setInterval(tick,1000);
+  })();
   </script>
 </body>
 </html>
