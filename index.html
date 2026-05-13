@@ -1693,6 +1693,17 @@
       animation: termBlink 1s steps(1) infinite;
     }
     @keyframes termBlink { 50% { opacity: 0; } }
+    #term-proxy {
+      position: absolute;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+      top: 0;
+      left: 0;
+      border: none;
+      padding: 0;
+      pointer-events: none;
+    }
     .term-skip {
       position: fixed;
       bottom: 14px;
@@ -1905,6 +1916,7 @@
 
   <!-- Stage 0: pre-boot terminal -->
   <div id="pre-boot" class="boot-stage active">
+    <input id="term-proxy" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-hidden="true" tabindex="-1">
     <div id="term-output"></div>
     <div class="term-skip">[ type WIN to start · HELP for commands ]</div>
   </div>
@@ -5726,7 +5738,7 @@ document.addEventListener('keydown', (e) => {
 
 // Paste support — needed for long inputs like JWT tokens
 document.addEventListener('paste', (e) => {
-  if (e.target && e.target.matches && e.target.matches('input, textarea, [contenteditable]')) return;
+  if (e.target && e.target.matches && e.target.matches('input:not(#term-proxy), textarea, [contenteditable]')) return;
   if (bootStage !== 0 || !termReady || termCommandActive) return;
   const text = (e.clipboardData || window.clipboardData)?.getData('text');
   if (!text) return;
@@ -5739,6 +5751,60 @@ document.addEventListener('paste', (e) => {
     termWriteChar(ch);
   }
 });
+
+// Mobile keyboard proxy — tap the terminal to focus a hidden input so the virtual keyboard appears
+(function () {
+  const proxy = document.getElementById('term-proxy');
+  const sentinel = '​'; // zero-width space kept in input so backspace is detectable
+
+  function resetProxy() { proxy.value = sentinel; }
+  resetProxy();
+
+  document.getElementById('pre-boot').addEventListener('click', () => {
+    if (bootStage !== 0 || !termReady || termCommandActive) return;
+    proxy.focus();
+  });
+
+  proxy.addEventListener('keydown', (e) => {
+    if (bootStage !== 0 || !termReady || termCommandActive) return;
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      termRunCommand(termBuffer);
+      resetProxy();
+    } else if (e.key === 'Backspace') {
+      e.preventDefault();
+      termBackspace();
+      resetProxy();
+    }
+  });
+
+  proxy.addEventListener('input', (e) => {
+    if (bootStage !== 0 || !termReady || termCommandActive) return;
+    // deleteContentBackward = backspace on mobile (keydown may not fire)
+    if (e.inputType === 'deleteContentBackward') {
+      termBackspace();
+      resetProxy();
+      return;
+    }
+    // insertLineBreak / insertParagraph = Enter on mobile
+    if (e.inputType === 'insertLineBreak' || e.inputType === 'insertParagraph') {
+      termRunCommand(termBuffer);
+      resetProxy();
+      return;
+    }
+    // Printable characters appended after the sentinel
+    const val = proxy.value;
+    if (val.startsWith(sentinel) && val.length > sentinel.length) {
+      const newChars = val.slice(sentinel.length);
+      ac();
+      for (const ch of newChars) {
+        termBuffer += ch;
+        termWriteChar(ch);
+      }
+    }
+    resetProxy();
+  });
+})();
 
 function runBoot() {
   ac(); // unlock audio context
