@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Derrick Fink</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <style>
+    :root {
+      --magenta: #E20074;
+      --magenta-dark: #a8004f;
+      --bg: #0a0a0a;
+      --surface: #161616;
+      --border: #2a2a2a;
+      --text: #f0f0f0;
+      --muted: #777;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      -webkit-text-size-adjust: 100%;
+      touch-action: manipulation;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+    }
+
+    /* ── Status Bar ── */
+    .status-bar {
+      background: #000;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      flex-shrink: 0;
+    }
+
+    .carrier-name {
+      color: var(--magenta);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .status-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .signal {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5px;
+      height: 11px;
+    }
+
+    .signal span {
+      display: block;
+      width: 2.5px;
+      background: var(--magenta);
+      border-radius: 1px 1px 0 0;
+    }
+    .signal span:nth-child(1) { height: 3px; }
+    .signal span:nth-child(2) { height: 5px; }
+    .signal span:nth-child(3) { height: 7px; }
+    .signal span:nth-child(4) { height: 9px; }
+    .signal span:nth-child(5) { height: 11px; }
+
+    .status-clock {
+      color: #fff;
+      font-size: 10px;
+      font-weight: 500;
+      min-width: 44px;
+      text-align: right;
+    }
+
+    .battery {
+      width: 18px;
+      height: 9px;
+      border: 1.5px solid #888;
+      border-radius: 2px;
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      padding: 1.5px;
+    }
+
+    .battery::after {
+      content: '';
+      position: absolute;
+      right: -4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 2.5px;
+      height: 4px;
+      background: #888;
+      border-radius: 0 1px 1px 0;
+    }
+
+    .battery-fill {
+      background: #4dbe5d;
+      flex: 1;
+      border-radius: 1px;
+    }
+
+    /* ── App Bar ── */
+    .app-bar {
+      background: linear-gradient(180deg, #252525 0%, #161616 100%);
+      border-bottom: 2px solid var(--magenta);
+      height: 38px;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      flex-shrink: 0;
+      gap: 4px;
+    }
+
+    .app-bar-title {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      text-align: center;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-btn {
+      color: var(--magenta);
+      font-size: 26px;
+      line-height: 1;
+      padding: 2px 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.15s;
+    }
+
+    .nav-btn:active { opacity: 0.5; }
+    .nav-btn.dim { color: #2a2a2a; pointer-events: none; }
+
+    /* ── Screen Wrap ── */
+    .screen-wrap {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      min-height: 0;
+    }
+
+    .screens {
+      display: flex;
+      height: 100%;
+      transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+    }
+
+    .screen {
+      min-width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      padding: 16px 14px 10px;
+    }
+
+    /* ── Dots ── */
+    .dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 0 4px;
+      background: var(--bg);
+      flex-shrink: 0;
+    }
+
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #2c2c2c;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .dot.active {
+      background: var(--magenta);
+      transform: scale(1.3);
+    }
+
+    /* ── D-Pad ── */
+    .dpad-area {
+      background: #0d0d0d;
+      border-top: 1px solid #1e1e1e;
+      padding: 10px 0 16px;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .dpad {
+      position: relative;
+      width: 96px;
+      height: 96px;
+    }
+
+    .dpad-arm {
+      position: absolute;
+      background: linear-gradient(180deg, #2e2e2e 0%, #1c1c1c 100%);
+      border: 1px solid #3a3a3a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--magenta);
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .dpad-arm:active { background: #2a1020; border-color: var(--magenta-dark); }
+
+    .dpad-up    { top:0;    left:30px; right:30px; height:30px; border-radius:8px 8px 0 0; }
+    .dpad-down  { bottom:0; left:30px; right:30px; height:30px; border-radius:0 0 8px 8px; }
+    .dpad-left  { left:0;   top:30px; bottom:30px; width:30px;  border-radius:8px 0 0 8px; }
+    .dpad-right { right:0;  top:30px; bottom:30px; width:30px;  border-radius:0 8px 8px 0; }
+
+    .dpad-center {
+      position: absolute;
+      inset: 28px;
+      background: radial-gradient(circle at 40% 35%, #3d3d3d, #1a1a1a);
+      border: 1.5px solid #3a3a3a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: var(--magenta);
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .dpad-center:active { background: radial-gradient(circle at 40% 35%, #5a2040, #2a1020); }
+
+    /* ── Home Screen ── */
+    .home-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 0;
+      text-align: center;
+      padding-bottom: 20px;
+    }
+
+    .home-time {
+      font-size: 62px;
+      font-weight: 100;
+      color: #fff;
+      letter-spacing: -3px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .home-ampm {
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .home-date {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .home-divider {
+      width: 50px;
+      height: 1.5px;
+      background: var(--magenta);
+      opacity: 0.7;
+      margin-bottom: 20px;
+    }
+
+    .home-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .home-handle {
+      font-size: 12px;
+      color: var(--magenta);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Section Label ── */
+    .section-label {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--magenta);
+      margin-bottom: 14px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+
+    .card-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--magenta);
+      margin-bottom: 7px;
+    }
+
+    .card-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #d8d8d8;
+    }
+
+    /* ── Skills ── */
+    .skill-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .skill-name {
+      width: 96px;
+      font-size: 12px;
+      color: #ccc;
+      flex-shrink: 0;
+    }
+
+    .skill-track {
+      flex: 1;
+      height: 4px;
+      background: #222;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--magenta-dark), var(--magenta));
+      border-radius: 2px;
+      width: 0;
+      transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .skill-pct {
+      font-size: 10px;
+      color: var(--muted);
+      width: 28px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ── Status items ── */
+    .status-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid #1c1c1c;
+    }
+
+    .status-item:last-child { border-bottom: none; }
+
+    .status-pip {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--magenta);
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .status-main {
+      font-size: 13px;
+      color: #ddd;
+      line-height: 1.4;
+    }
+
+    .status-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── Contact ── */
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .contact-link:active { background: #1e1e1e; }
+
+    .contact-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: var(--magenta);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .contact-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .contact-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .contact-chevron {
+      margin-left: auto;
+      color: #333;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="carrier-name">T&#8209;Mobile</span>
+    <div class="status-right">
+      <div class="signal">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <span class="status-clock" id="status-clock"></span>
+      <div class="battery"><div class="battery-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- App Bar -->
+  <div class="app-bar">
+    <span class="nav-btn dim" id="btn-prev">&#8249;</span>
+    <span class="app-bar-title" id="bar-title">Home</span>
+    <span class="nav-btn" id="btn-next">&#8250;</span>
+  </div>
+
+  <!-- Screens -->
+  <div class="screen-wrap" id="wrap">
+    <div class="screens" id="screens">
+
+      <!-- 0: Home -->
+      <div class="screen">
+        <div class="home-screen">
+          <div class="home-time" id="home-time"></div>
+          <div class="home-ampm" id="home-ampm"></div>
+          <div class="home-date" id="home-date"></div>
+          <div class="home-divider"></div>
+          <div class="home-name">Derrick Fink</div>
+          <div class="home-handle">@derrickf_bsu</div>
+        </div>
+      </div>
+
+      <!-- 1: About -->
+      <div class="screen">
+        <div class="section-label">About</div>
+        <div class="card">
+          <div class="card-label">Who</div>
+          <div class="card-text">Software Developer III at Boise State University — 13 years building web apps, AI tooling, and cloud infrastructure for ~25,000 students, faculty, and research computing.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Stack</div>
+          <div class="card-text">Angular &middot; .NET &middot; TypeScript &middot; AWS &middot; OpenSearch &middot; SQL Server</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Certs</div>
+          <div class="card-text">BSU ML Graduate Certificate ✓<br>AWS Solutions Architect &mdash; in progress</div>
+        </div>
+      </div>
+
+      <!-- 2: Skills -->
+      <div class="screen" id="skills-screen">
+        <div class="section-label">Skills</div>
+      </div>
+
+      <!-- 3: Currently -->
+      <div class="screen">
+        <div class="section-label">Currently</div>
+        <div class="card" style="padding: 4px 16px;">
+          <div class="status-item">
+            <div class="status-pip"></div>
+            <div>
+              <div class="status-main">Legacy app modernization</div>
+              <div class="status-sub">Boise State University</div>
+            </div>
+          </div>
+          <div class="status-item">
+            <div class="status-pip"></div>
+            <div>
+              <div class="status-main">AWS Solutions Architect prep</div>
+              <div class="status-sub">Q3 2026 target</div>
+            </div>
+          </div>
+          <div class="status-item">
+            <div class="status-pip"></div>
+            <div>
+              <div class="status-main">SLM research</div>
+              <div class="status-sub">Small language model work</div>
+            </div>
+          </div>
+          <div class="status-item">
+            <div class="status-pip"></div>
+            <div>
+              <div class="status-main">Half marathon training</div>
+              <div class="status-sub">35% of the way there</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4: Contact -->
+      <div class="screen">
+        <div class="section-label">Contact</div>
+        <a class="contact-link" href="https://github.com/derrickfink" target="_blank" rel="noopener">
+          <div class="contact-icon">&#128736;</div>
+          <div>
+            <div class="contact-label">GitHub</div>
+            <div class="contact-sub">github.com/derrickfink</div>
+          </div>
+          <span class="contact-chevron">&#8250;</span>
+        </a>
+        <a class="contact-link" href="https://linkedin.com/in/derrickfink" target="_blank" rel="noopener">
+          <div class="contact-icon">&#128101;</div>
+          <div>
+            <div class="contact-label">LinkedIn</div>
+            <div class="contact-sub">linkedin.com/in/derrickfink</div>
+          </div>
+          <span class="contact-chevron">&#8250;</span>
+        </a>
+        <a class="contact-link" href="mailto:derrick@aol.com">
+          <div class="contact-icon">&#9993;</div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-sub">derrick@aol.com</div>
+          </div>
+          <span class="contact-chevron">&#8250;</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Dots -->
+  <div class="dots" id="dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <!-- D-Pad -->
+  <div class="dpad-area">
+    <div class="dpad">
+      <div class="dpad-arm dpad-up"    id="dp-up">&#9650;</div>
+      <div class="dpad-arm dpad-down"  id="dp-down">&#9660;</div>
+      <div class="dpad-arm dpad-left"  id="dp-left">&#9664;</div>
+      <div class="dpad-arm dpad-right" id="dp-right">&#9654;</div>
+      <div class="dpad-center"         id="dp-jump">JUMP</div>
+    </div>
+  </div>
+
+  <script>
+    const TITLES = ['Home', 'About', 'Skills', 'Currently', 'Contact'];
+    const SKILLS = [
+      { name: 'TypeScript',  pct: 90 },
+      { name: 'Angular',     pct: 85 },
+      { name: 'SQL Server',  pct: 80 },
+      { name: 'AWS',         pct: 75 },
+      { name: '.NET / C#',   pct: 75 },
+      { name: 'OpenSearch',  pct: 70 },
+      { name: 'ML / AI',     pct: 65 },
+    ];
+
+    let cur = 0;
+    let skillsAnimated = false;
+
+    // Build skill rows
+    const skillsScreen = document.getElementById('skills-screen');
+    SKILLS.forEach(s => {
+      const row = document.createElement('div');
+      row.className = 'skill-row';
+      row.innerHTML =
+        `<span class="skill-name">${s.name}</span>` +
+        `<div class="skill-track"><div class="skill-fill" data-pct="${s.pct}"></div></div>` +
+        `<span class="skill-pct">${s.pct}%</span>`;
+      skillsScreen.appendChild(row);
+    });
+
+    function goTo(n) {
+      n = Math.max(0, Math.min(TITLES.length - 1, n));
+      cur = n;
+      document.getElementById('screens').style.transform = `translateX(${-n * 100}%)`;
+      document.getElementById('bar-title').textContent = TITLES[n];
+      document.getElementById('btn-prev').classList.toggle('dim', n === 0);
+      document.getElementById('btn-next').classList.toggle('dim', n === TITLES.length - 1);
+      document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === n));
+      if (n === 2 && !skillsAnimated) {
+        skillsAnimated = true;
+        setTimeout(() => {
+          document.querySelectorAll('.skill-fill').forEach(el => {
+            el.style.width = el.dataset.pct + '%';
+          });
+        }, 180);
+      }
+    }
+
+    function scrollCurrent(delta) {
+      document.querySelectorAll('.screen')[cur].scrollBy({ top: delta, behavior: 'smooth' });
+    }
+
+    document.getElementById('btn-prev').addEventListener('click', () => goTo(cur - 1));
+    document.getElementById('btn-next').addEventListener('click', () => goTo(cur + 1));
+    document.getElementById('dp-left').addEventListener('click', () => goTo(cur - 1));
+    document.getElementById('dp-right').addEventListener('click', () => goTo(cur + 1));
+    document.getElementById('dp-up').addEventListener('click', () => scrollCurrent(-80));
+    document.getElementById('dp-down').addEventListener('click', () => scrollCurrent(80));
+    document.getElementById('dp-jump').addEventListener('click', () => goTo(0));
+
+    // Touch swipe
+    let tx = 0;
+    const wrap = document.getElementById('wrap');
+    wrap.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    wrap.addEventListener('touchend', e => {
+      const dx = tx - e.changedTouches[0].clientX;
+      if (Math.abs(dx) > 44) goTo(cur + (dx > 0 ? 1 : -1));
+    }, { passive: true });
+
+    // Clock
+    const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+    function tick() {
+      const now = new Date();
+      const h = now.getHours();
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const h12 = String((h % 12) || 12);
+      document.getElementById('status-clock').textContent = h12 + ':' + m + ' ' + ampm;
+      document.getElementById('home-time').textContent = h12 + ':' + m;
+      document.getElementById('home-ampm').textContent = ampm;
+      document.getElementById('home-date').textContent =
+        DAYS[now.getDay()] + ', ' + MONTHS[now.getMonth()] + ' ' + now.getDate();
+    }
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
