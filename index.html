@@ -1,513 +1,642 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Derrick Fink — Software Engineer</title>
-  <meta name="description" content="Derrick Fink — Software Engineer at Boise State University. Building real systems with AWS, Python, and ML.">
-  <meta name="author" content="Derrick Fink">
-  <meta name="theme-color" content="#FFD93D">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Derrick Fink — Software Engineer</title>
+    <meta
+      name="description"
+      content="Derrick Fink — Senior Software Engineer at Boise State University. 13 years building web apps, AI tooling, and cloud infrastructure for 30,000+ students, faculty, and staff."
+    />
+    <meta name="author" content="Derrick Fink" />
+    <meta name="theme-color" content="#FFD93D" />
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Derrick Fink — derrickfink.com">
-  <meta property="og:description" content="Software Engineer · Boise State University. Building real systems.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.derrickfink.com/">
-  <meta property="og:site_name" content="derrickfink.com">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Derrick Fink — derrickfink.com" />
+    <meta
+      property="og:description"
+      content="Senior Software Engineer at Boise State University. Web apps, AI tooling, and cloud infrastructure for 30,000+ students, faculty, and staff."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.derrickfink.com/" />
+    <meta property="og:site_name" content="derrickfink.com" />
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Derrick Fink — derrickfink.com">
-  <meta name="twitter:description" content="Software Engineer · Boise State University.">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Derrick Fink — derrickfink.com" />
+    <meta name="twitter:description" content="Senior Software Engineer at Boise State University." />
 
-  <!-- Favicon: bold "DF" on mustard yellow -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23FFD93D'/%3E%3Crect x='1' y='1' width='30' height='30' fill='none' stroke='%230A0A0A' stroke-width='2'/%3E%3Ctext x='16' y='24' font-size='20' font-weight='900' fill='%230A0A0A' text-anchor='middle' font-family='Inter,Arial Black,Impact,sans-serif' letter-spacing='-1'%3EDF%3C/text%3E%3C/svg%3E">
+    <!-- Favicon: bold "DF" on mustard yellow -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23FFD93D'/%3E%3Crect x='1' y='1' width='30' height='30' fill='none' stroke='%230A0A0A' stroke-width='2'/%3E%3Ctext x='16' y='24' font-size='20' font-weight='900' fill='%230A0A0A' text-anchor='middle' font-family='Inter,Arial Black,Impact,sans-serif' letter-spacing='-1'%3EDF%3C/text%3E%3C/svg%3E"
+    />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
-  <style>
-    :root {
-      --bg:         #F5F1E8;   /* cream */
-      --fg:         #0A0A0A;   /* near-black */
-      --paper:      #FFFFFF;
-      --yellow:     #FFD93D;
-      --coral:      #FF6B6B;
-      --teal:       #4ECDC4;
-      --mint:       #A8E6CF;
-      --lavender:   #C8B6FF;
-      --offset:     8px;
-      --offset-sm:  4px;
-      --offset-lg:  10px;
-      --border:     3px;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      background: var(--bg);
-      color: var(--fg);
-      font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
-      font-size: 17px;
-      line-height: 1.55;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* Subtle dotted grid backdrop */
-    body {
-      background-image: radial-gradient(rgba(10,10,10,0.07) 1.2px, transparent 1.2px);
-      background-size: 22px 22px;
-      min-height: 100vh;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem 6rem;
-    }
-
-    /* ── Top status bar ─────────────────────────────────── */
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: 4rem;
-      flex-wrap: wrap;
-    }
-    .topbar .mono {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      letter-spacing: 0.04em;
-    }
-    .topbar .live {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--fg);
-      color: var(--bg);
-      padding: 0.35rem 0.75rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-    .live::before {
-      content: "";
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #5fd97a;
-      animation: pulse 1.6s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    /* ── Hero ───────────────────────────────────────────── */
-    .hero { margin-bottom: 5rem; position: relative; }
-
-    .hero h1 {
-      font-size: clamp(3rem, 14vw, 8.5rem);
-      font-weight: 700;
-      letter-spacing: -0.05em;
-      line-height: 0.9;
-      margin-bottom: 1.5rem;
-    }
-    .hero h1 .ampersand {
-      color: var(--coral);
-      font-style: italic;
-      font-weight: 400;
-    }
-
-    .hero .role {
-      font-size: clamp(1.1rem, 2.2vw, 1.4rem);
-      font-weight: 500;
-      max-width: 36rem;
-      margin-bottom: 2rem;
-    }
-    .hero .role b { background: var(--yellow); padding: 0.05em 0.3em; }
-
-    .status-card {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: var(--yellow);
-      border: var(--border) solid var(--fg);
-      padding: 0.7rem 1.1rem;
-      font-weight: 700;
-      box-shadow: var(--offset) var(--offset) 0 var(--fg);
-      transform: rotate(-1.2deg);
-      font-size: 0.95rem;
-    }
-    .status-card .away-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #ffe87a, #ff9d00);
-      box-shadow: 0 0 6px rgba(255,160,0,0.5);
-    }
-
-    /* ── Section heading ────────────────────────────────── */
-    section {
-      margin-top: 5rem;
-      scroll-margin-top: 2rem;
-    }
-    .section-label {
-      display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      font-weight: 700;
-      background: var(--fg);
-      color: var(--bg);
-      padding: 0.25rem 0.6rem;
-      margin-bottom: 1rem;
-      letter-spacing: 0.1em;
-    }
-    section h2 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      margin-bottom: 2rem;
-      max-width: 22ch;
-    }
-
-    /* ── About ──────────────────────────────────────────── */
-    .about-body {
-      font-size: 1.15rem;
-      line-height: 1.6;
-      max-width: 42rem;
-    }
-    .about-body p + p { margin-top: 1rem; }
-    .about-body em {
-      font-style: normal;
-      background: var(--mint);
-      padding: 0.05em 0.3em;
-    }
-
-    /* ── Card grid ──────────────────────────────────────── */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-    .card {
-      background: var(--paper);
-      border: var(--border) solid var(--fg);
-      padding: 1.5rem;
-      box-shadow: var(--offset) var(--offset) 0 var(--fg);
-      transition: transform 0.12s ease, box-shadow 0.12s ease;
-    }
-    .card:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: calc(var(--offset) + 2px) calc(var(--offset) + 2px) 0 var(--fg);
-    }
-    .card h3 {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.4rem;
-    }
-    .card p { font-size: 0.97rem; }
-    .card .card-tag {
-      display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      background: var(--fg);
-      color: var(--bg);
-      padding: 0.15rem 0.5rem;
-      margin-bottom: 0.7rem;
-      letter-spacing: 0.05em;
-    }
-    .card:nth-of-type(3n+1) { background: var(--paper); }
-    .card:nth-of-type(3n+2) { background: var(--mint); }
-    .card:nth-of-type(3n+3) { background: var(--lavender); }
-
-    /* ── Tags ───────────────────────────────────────────── */
-    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .tag {
-      background: var(--paper);
-      border: 2px solid var(--fg);
-      padding: 0.3rem 0.75rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      font-weight: 500;
-      box-shadow: var(--offset-sm) var(--offset-sm) 0 var(--fg);
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-    .tag:hover {
-      transform: translate(-1px, -1px);
-      box-shadow: calc(var(--offset-sm) + 1px) calc(var(--offset-sm) + 1px) 0 var(--fg);
-    }
-    .tag.accent-y { background: var(--yellow); }
-    .tag.accent-c { background: var(--coral); }
-    .tag.accent-t { background: var(--teal); }
-
-    /* ── Contact links ──────────────────────────────────── */
-    .link-stack {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    }
-    .big-link {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      background: var(--yellow);
-      border: var(--border) solid var(--fg);
-      padding: 1.1rem 1.3rem;
-      color: var(--fg);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 1.05rem;
-      box-shadow: var(--offset) var(--offset) 0 var(--fg);
-      transition: transform 0.1s, box-shadow 0.1s;
-      word-break: break-word;
-    }
-    .big-link:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: calc(var(--offset) + 2px) calc(var(--offset) + 2px) 0 var(--fg);
-    }
-    .big-link:active {
-      transform: translate(var(--offset), var(--offset));
-      box-shadow: 0 0 0 var(--fg);
-    }
-    .big-link.coral { background: var(--coral); }
-    .big-link.teal  { background: var(--teal); }
-    .big-link.paper { background: var(--paper); }
-    .big-link .arrow { margin-left: auto; font-weight: 700; }
-
-    /* ── View switcher (the hooks) ──────────────────────── */
-    .switcher {
-      margin-top: 6rem;
-      background: var(--fg);
-      color: var(--bg);
-      border: var(--border) solid var(--fg);
-      box-shadow: var(--offset) var(--offset) 0 var(--yellow);
-      padding: 2rem 1.75rem;
-    }
-    .switcher .label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      letter-spacing: 0.1em;
-      color: var(--yellow);
-      margin-bottom: 0.4rem;
-    }
-    .switcher h2 {
-      color: var(--bg);
-      font-size: clamp(1.5rem, 3.5vw, 2rem);
-      margin-bottom: 1.5rem;
-    }
-    .switcher-grid {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    }
-    .vbtn {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      background: var(--bg);
-      color: var(--fg);
-      border: var(--border) solid var(--bg);
-      padding: 1.1rem 1.2rem;
-      text-decoration: none;
-      transition: transform 0.1s, background 0.1s, color 0.1s;
-    }
-    .vbtn:hover { background: var(--yellow); }
-    .vbtn:active { transform: translate(2px, 2px); }
-    .vbtn .vbtn-mono {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      color: var(--fg);
-      opacity: 0.6;
-    }
-    .vbtn .vbtn-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    .vbtn .vbtn-desc { font-size: 0.85rem; line-height: 1.4; }
-
-    /* ── Footer ─────────────────────────────────────────── */
-    footer {
-      margin-top: 5rem;
-      padding-top: 2rem;
-      border-top: 2px solid var(--fg);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: space-between;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      color: var(--fg);
-      opacity: 0.75;
-    }
-
-    /* ── Decorative sticker ─────────────────────────────── */
-    .sticker {
-      position: absolute;
-      top: 1rem; right: 1rem;
-      width: 110px; height: 110px;
-      background: var(--coral);
-      border: var(--border) solid var(--fg);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      font-weight: 700;
-      line-height: 1.15;
-      transform: rotate(8deg);
-      box-shadow: 4px 4px 0 var(--fg);
-      letter-spacing: 0.04em;
-    }
-    @media (max-width: 720px) {
-      .sticker {
-        position: static;
-        width: 92px; height: 92px;
-        font-size: 0.7rem;
-        transform: rotate(6deg);
-        margin: 0 0 1.5rem auto;
-        display: flex;
+    <style>
+      :root {
+        --bg: #f5f1e8; /* cream */
+        --fg: #0a0a0a; /* near-black */
+        --paper: #ffffff;
+        --yellow: #ffd93d;
+        --coral: #ff6b6b;
+        --teal: #4ecdc4;
+        --mint: #a8e6cf;
+        --lavender: #c8b6ff;
+        --offset: 8px;
+        --offset-sm: 4px;
+        --offset-lg: 10px;
+        --border: 3px;
       }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
 
-    <!-- Top status -->
-    <header class="topbar">
-      <span class="mono">derrickfink.com</span>
-      <span class="live">Online · Boise, ID</span>
-    </header>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    <!-- Hero -->
-    <section class="hero" aria-label="intro">
-      <div class="sticker">CURRENTLY<br>HIRABLE<br>—<br>👋</div>
-      <h1>Derrick<br>Fink<span class="ampersand">.</span></h1>
-      <p class="role">
-        Software Engineer at <b>Boise State University</b> — I build real systems that ship and stick.
-        Lately: ML pipelines, AWS infra, university-wide web overhauls.
-      </p>
-      <div class="status-card">
-        <span class="away-dot"></span>
-        Away — Building BSU's digital experience. BRB.
-      </div>
-    </section>
+      html,
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family:
+          "Space Grotesk",
+          "Inter",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        font-size: 17px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
 
-    <!-- About -->
-    <section id="about">
-      <span class="section-label">// 01 — ABOUT</span>
-      <h2>I make things that aren't supposed to break.</h2>
-      <div class="about-body">
-        <p>
-          I'm a software engineer at <em>Boise State University</em>. I just finished my
-          <em>ML graduate certificate</em>, and I'm working toward AWS Solutions Architect.
+      /* Subtle dotted grid backdrop */
+      body {
+        background-image: radial-gradient(rgba(10, 10, 10, 0.07) 1.2px, transparent 1.2px);
+        background-size: 22px 22px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 6rem;
+      }
+
+      /* ── Top status bar ─────────────────────────────────── */
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 4rem;
+        flex-wrap: wrap;
+      }
+      .topbar .mono {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        letter-spacing: 0.04em;
+      }
+      .topbar .live {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--fg);
+        color: var(--bg);
+        padding: 0.35rem 0.75rem;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .live::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #5fd97a;
+        animation: pulse 1.6s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      /* ── Hero ───────────────────────────────────────────── */
+      .hero {
+        margin-bottom: 5rem;
+        position: relative;
+      }
+
+      .hero h1 {
+        font-size: clamp(3rem, 14vw, 8.5rem);
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        line-height: 0.9;
+        margin-bottom: 1.5rem;
+      }
+      .hero h1 .ampersand {
+        color: var(--coral);
+        font-style: italic;
+        font-weight: 400;
+      }
+
+      .hero .role {
+        font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+        font-weight: 500;
+        max-width: 36rem;
+        margin-bottom: 2rem;
+      }
+      .hero .role b {
+        background: var(--yellow);
+        padding: 0.05em 0.3em;
+      }
+
+      .status-card {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: var(--yellow);
+        border: var(--border) solid var(--fg);
+        padding: 0.7rem 1.1rem;
+        font-weight: 700;
+        box-shadow: var(--offset) var(--offset) 0 var(--fg);
+        transform: rotate(-1.2deg);
+        font-size: 0.95rem;
+      }
+      .status-card .away-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #ffe87a, #ff9d00);
+        box-shadow: 0 0 6px rgba(255, 160, 0, 0.5);
+      }
+
+      /* ── Section heading ────────────────────────────────── */
+      section {
+        margin-top: 5rem;
+        scroll-margin-top: 2rem;
+      }
+      .section-label {
+        display: inline-block;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.8rem;
+        font-weight: 700;
+        background: var(--fg);
+        color: var(--bg);
+        padding: 0.25rem 0.6rem;
+        margin-bottom: 1rem;
+        letter-spacing: 0.1em;
+      }
+      section h2 {
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin-bottom: 2rem;
+        max-width: 22ch;
+      }
+
+      /* ── About ──────────────────────────────────────────── */
+      .about-body {
+        font-size: 1.15rem;
+        line-height: 1.6;
+        max-width: 42rem;
+      }
+      .about-body p + p {
+        margin-top: 1rem;
+      }
+      .about-body em {
+        font-style: normal;
+        background: var(--mint);
+        padding: 0.05em 0.3em;
+      }
+
+      /* ── Card grid ──────────────────────────────────────── */
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+      }
+      .card {
+        background: var(--paper);
+        border: var(--border) solid var(--fg);
+        padding: 1.5rem;
+        box-shadow: var(--offset) var(--offset) 0 var(--fg);
+        transition:
+          transform 0.12s ease,
+          box-shadow 0.12s ease;
+      }
+      .card:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: calc(var(--offset) + 2px) calc(var(--offset) + 2px) 0 var(--fg);
+      }
+      .card h3 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.4rem;
+      }
+      .card p {
+        font-size: 0.97rem;
+      }
+      .card .card-tag {
+        display: inline-block;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        background: var(--fg);
+        color: var(--bg);
+        padding: 0.15rem 0.5rem;
+        margin-bottom: 0.7rem;
+        letter-spacing: 0.05em;
+      }
+      .card:nth-of-type(3n + 1) {
+        background: var(--paper);
+      }
+      .card:nth-of-type(3n + 2) {
+        background: var(--mint);
+      }
+      .card:nth-of-type(3n + 3) {
+        background: var(--lavender);
+      }
+
+      .card-link {
+        display: inline-block;
+        margin-top: 0.4rem;
+        color: var(--fg);
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 3px;
+        font-weight: 700;
+      }
+      .card-link:hover {
+        background: var(--yellow);
+      }
+
+      /* ── Tags ───────────────────────────────────────────── */
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .tag {
+        background: var(--paper);
+        border: 2px solid var(--fg);
+        padding: 0.3rem 0.75rem;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        font-weight: 500;
+        box-shadow: var(--offset-sm) var(--offset-sm) 0 var(--fg);
+        transition:
+          transform 0.1s,
+          box-shadow 0.1s;
+      }
+      .tag:hover {
+        transform: translate(-1px, -1px);
+        box-shadow: calc(var(--offset-sm) + 1px) calc(var(--offset-sm) + 1px) 0 var(--fg);
+      }
+      .tag.accent-y {
+        background: var(--yellow);
+      }
+      .tag.accent-c {
+        background: var(--coral);
+      }
+      .tag.accent-t {
+        background: var(--teal);
+      }
+
+      /* ── Contact links ──────────────────────────────────── */
+      .link-stack {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+      .big-link {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        background: var(--yellow);
+        border: var(--border) solid var(--fg);
+        padding: 1.1rem 1.3rem;
+        color: var(--fg);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.05rem;
+        box-shadow: var(--offset) var(--offset) 0 var(--fg);
+        transition:
+          transform 0.1s,
+          box-shadow 0.1s;
+        word-break: break-word;
+      }
+      .big-link:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: calc(var(--offset) + 2px) calc(var(--offset) + 2px) 0 var(--fg);
+      }
+      .big-link:active {
+        transform: translate(var(--offset), var(--offset));
+        box-shadow: 0 0 0 var(--fg);
+      }
+      .big-link.coral {
+        background: var(--coral);
+      }
+      .big-link.teal {
+        background: var(--teal);
+      }
+      .big-link.paper {
+        background: var(--paper);
+      }
+      .big-link .arrow {
+        margin-left: auto;
+        font-weight: 700;
+      }
+
+      /* ── View switcher (the hooks) ──────────────────────── */
+      .switcher {
+        margin-top: 6rem;
+        background: var(--fg);
+        color: var(--bg);
+        border: var(--border) solid var(--fg);
+        box-shadow: var(--offset) var(--offset) 0 var(--yellow);
+        padding: 2rem 1.75rem;
+      }
+      .switcher .label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        color: var(--yellow);
+        margin-bottom: 0.4rem;
+      }
+      .switcher h2 {
+        color: var(--bg);
+        font-size: clamp(1.5rem, 3.5vw, 2rem);
+        margin-bottom: 1.5rem;
+      }
+      .switcher-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+      .vbtn {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        background: var(--bg);
+        color: var(--fg);
+        border: var(--border) solid var(--bg);
+        padding: 1.1rem 1.2rem;
+        text-decoration: none;
+        transition:
+          transform 0.1s,
+          background 0.1s,
+          color 0.1s;
+      }
+      .vbtn:hover {
+        background: var(--yellow);
+      }
+      .vbtn:active {
+        transform: translate(2px, 2px);
+      }
+      .vbtn .vbtn-mono {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        color: var(--fg);
+        opacity: 0.6;
+      }
+      .vbtn .vbtn-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .vbtn .vbtn-desc {
+        font-size: 0.85rem;
+        line-height: 1.4;
+      }
+
+      /* ── Footer ─────────────────────────────────────────── */
+      footer {
+        margin-top: 5rem;
+        padding-top: 2rem;
+        border-top: 2px solid var(--fg);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: space-between;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.78rem;
+        color: var(--fg);
+        opacity: 0.75;
+      }
+
+      /* ── Decorative sticker ─────────────────────────────── */
+      .sticker {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 110px;
+        height: 110px;
+        background: var(--coral);
+        border: var(--border) solid var(--fg);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        font-weight: 700;
+        line-height: 1.15;
+        transform: rotate(8deg);
+        box-shadow: 4px 4px 0 var(--fg);
+        letter-spacing: 0.04em;
+      }
+      @media (max-width: 720px) {
+        .sticker {
+          position: static;
+          width: 92px;
+          height: 92px;
+          font-size: 0.7rem;
+          transform: rotate(6deg);
+          margin: 0 0 1.5rem auto;
+          display: flex;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Top status -->
+      <header class="topbar">
+        <span class="mono">derrickfink.com</span>
+        <span class="live">Online · Boise, ID</span>
+      </header>
+
+      <!-- Hero -->
+      <section class="hero" aria-label="intro">
+        <h1>Derrick<br />Fink<span class="ampersand">.</span></h1>
+        <p class="role">
+          Senior Software Engineer at <b>Boise State University</b>. I've spent the last 13 years building web apps, AI tooling, and cloud infrastructure for
+          <b>30,000+ students, faculty, and staff</b>.
         </p>
-        <p>
-          The work I'm proudest of usually doesn't look glamorous — rescuing a stalled
-          university-wide overhaul, automating away a paperwork mountain, tuning an inference
-          pipeline until it earns its keep. If it ships and survives Monday morning, that's the win.
-        </p>
-      </div>
-    </section>
-
-    <!-- Work -->
-    <section id="work">
-      <span class="section-label">// 02 — WORK</span>
-      <h2>What I've been shipping.</h2>
-      <div class="card-grid">
-        <div class="card">
-          <span class="card-tag">UNIVERSITY</span>
-          <h3>BSU Digital Experience</h3>
-          <p>Stepped in mid-flight, rescued a stalled university-wide web overhaul, and shipped it. Worked nights for the launch — voluntarily.</p>
+        <div class="status-card">
+          <span class="away-dot"></span>
+          Currently building BSU's digital experience.
         </div>
-        <div class="card">
-          <span class="card-tag">CLOUD</span>
-          <h3>AWS Infrastructure</h3>
-          <p>Lambda, API Gateway, Secrets Manager, Route 53 in daily use. Formalizing the muscle memory with Solutions Architect cert.</p>
+      </section>
+
+      <!-- About -->
+      <section id="about">
+        <span class="section-label">// 01 — ABOUT</span>
+        <h2>I build software that 30k people quietly rely on.</h2>
+        <div class="about-body">
+          <p>
+            I'm a senior software engineer at <em>Boise State University</em>, where I've shipped everything from BSU's public course search page, to the AI
+            platform behind boisestate.ai, to a travel approval system that replaced a mountain of paper forms.
+          </p>
+          <p>
+            I've been here <em>13 years</em>. That's long enough to live with my own decisions — to maintain the code I wrote, debug the assumptions I made, and
+            still be the one on call when something breaks. I didn't build something overengineered and move on to the next startup. I shipped it, and then I
+            kept it running.
+          </p>
+          <p>
+            Three of us shipped a campus-wide AI platform on AWS and cut per-user cost by <em>80%</em>. That's the work I like best: small teams, real stakes,
+            production systems that have to work every single day. I just finished my <em>ML graduate certificate</em>, and AWS Solutions Architect is up next.
+          </p>
         </div>
-        <div class="card">
-          <span class="card-tag">ML / AI</span>
-          <h3>Production ML</h3>
-          <p>Grad cert complete. Applied machine learning shipped to production, not just notebooks. Boring is a feature.</p>
+      </section>
+
+      <!-- Work -->
+      <section id="work">
+        <span class="section-label">// 02 — WORK</span>
+        <h2>A few things I've shipped.</h2>
+        <div class="card-grid">
+          <div class="card">
+            <span class="card-tag">BOISESTATE.AI · FEATURED BY AWS</span>
+            <h3>Campus AI Assistant Platform</h3>
+            <p>
+              Open-source, multi-LLM AI platform that powers boisestate.ai across the university. A small team of three of us built it end-to-end on AWS — and
+              cut per-user cost by <b>80%</b> along the way.
+              <a
+                href="https://aws.amazon.com/blogs/publicsector/boise-state-university-builds-campus-wide-ai-platform-on-aws-and-cuts-per-user-costs-by-80/"
+                target="_blank"
+                rel="noopener"
+                class="card-link"
+                >AWS wrote about how we did it →</a
+              >
+            </p>
+          </div>
+          <div class="card">
+            <span class="card-tag">COURSE SEARCH · PUBLIC</span>
+            <h3>Course Search at boisestate.edu</h3>
+            <p>
+              BSU's course data used to live inside PeopleSoft — login-gated and painfully slow even when you got in. I rebuilt it end-to-end as a fast, public
+              search: Angular SSR frontend, fully serverless ETL pipeline, OpenSearch backend, all on AWS Lambda + API Gateway. Now anyone — current students,
+              prospective applicants, even curious parents — can browse every section, time slot, and instructor in real time.
+              <a href="https://classes.boisestate.edu" target="_blank" rel="noopener" class="card-link">Check it out for yourself →</a>
+            </p>
+          </div>
+          <div class="card">
+            <span class="card-tag">TRAVEL AUTH · INTERNAL</span>
+            <h3>Travel Authorization System</h3>
+            <p>
+              University-wide travel approvals for BSU employees. .NET on AWS. Not flashy, but it saves a lot of people a lot of paperwork — which
+              is the whole point.
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Stack -->
-    <section id="stack">
-      <span class="section-label">// 03 — STACK</span>
-      <h2>The kit I reach for.</h2>
-      <div class="tags">
-        <span class="tag accent-y">AWS</span>
-        <span class="tag">Lambda</span>
-        <span class="tag">API Gateway</span>
-        <span class="tag">Route 53</span>
-        <span class="tag">Secrets Manager</span>
-        <span class="tag accent-t">Python</span>
-        <span class="tag">TypeScript</span>
-        <span class="tag">JavaScript</span>
-        <span class="tag">SQL</span>
-        <span class="tag accent-c">scikit-learn</span>
-        <span class="tag">pandas</span>
-        <span class="tag">PyTorch</span>
-      </div>
-    </section>
+      <!-- Stack -->
+      <section id="stack">
+        <span class="section-label">// 03 — STACK</span>
+        <h2>The kit I reach for daily.</h2>
+        <div class="tags">
+          <span class="tag accent-y">Angular</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag accent-t">.NET</span>
+          <span class="tag accent-y">AWS</span>
+          <span class="tag accent-c">AgentCore</span>
+          <span class="tag accent-c">Strands SDK</span>
+          <span class="tag">OpenSearch</span>
+        </div>
+      </section>
 
-    <!-- Contact -->
-    <section id="contact">
-      <span class="section-label">// 04 — CONTACT</span>
-      <h2>Say hi. I read everything.</h2>
-      <div class="link-stack">
-        <a class="big-link" href="mailto:derrick.w.fink@gmail.com">
-          <span>📧</span>
-          <span>derrick.w.fink@gmail.com</span>
-          <span class="arrow">→</span>
-        </a>
-        <a class="big-link coral" href="https://github.com/derrickfink" target="_blank" rel="noopener">
-          <span>🐙</span>
-          <span>github.com/derrickfink</span>
-          <span class="arrow">→</span>
-        </a>
-        <a class="big-link teal" href="https://linkedin.com/in/derrickfink" target="_blank" rel="noopener">
-          <span>💼</span>
-          <span>linkedin.com/in/derrickfink</span>
-          <span class="arrow">→</span>
-        </a>
-      </div>
-    </section>
+      <!-- Currently -->
+      <section id="currently">
+        <span class="section-label">// 04 — CURRENTLY</span>
+        <h2>What's on my desk right now.</h2>
+        <div class="card-grid">
+          <div class="card">
+            <span class="card-tag">CERT · Q3 2026</span>
+            <h3>AWS Solutions Architect</h3>
+            <p>Studying for the SAA. A lot of it is formalizing what I already do at work. After this: the AWS GenAI cert.</p>
+          </div>
+          <div class="card">
+            <span class="card-tag">GOAL · 2026</span>
+            <h3>Half Marathon Training</h3>
+            <p>Progress: ongoing. Setbacks: also ongoing. That's training.</p>
+          </div>
+          <div class="card">
+            <span class="card-tag">DONE</span>
+            <h3>ML Graduate Certificate</h3>
+            <p>Wrapped up the ML grad cert at BSU. Putting it to work on the AI assistant platform and a few small experiments in between.</p>
+          </div>
+        </div>
+      </section>
 
-    <!-- View switcher -->
-    <aside class="switcher" aria-label="alternate views">
-      <div class="label">// EASTER EGGS</div>
-      <h2>Same content. Different decade.</h2>
-      <div class="switcher-grid">
-        <a class="vbtn" href="/win95.html">
-          <span class="vbtn-mono">cmd · 1995</span>
-          <span class="vbtn-title">🪟 Windows 95 edition</span>
-          <span class="vbtn-desc">Boot sequence, dial-up, AIM buddy list, the works. Pop-up windows you can drag.</span>
-        </a>
-        <a class="vbtn" href="/mobile.html">
-          <span class="vbtn-mono">wm 2003 · 2003</span>
-          <span class="vbtn-title">📱 HP iPAQ edition</span>
-          <span class="vbtn-desc">Windows Mobile 2003 in a Pocket PC, with a working D-pad and hardware buttons.</span>
-        </a>
-      </div>
-    </aside>
+      <!-- Contact -->
+      <section id="contact">
+        <span class="section-label">// 05 — CONTACT</span>
+        <h2>Say hi. I read everything.</h2>
+        <div class="link-stack">
+          <a class="big-link" href="mailto:derrick.w.fink@gmail.com">
+            <span>derrick.w.fink@gmail.com</span>
+            <span class="arrow">→</span>
+          </a>
+          <a class="big-link coral" href="https://github.com/derrickfink" target="_blank" rel="noopener">
+            <span>github.com/derrickfink</span>
+            <span class="arrow">→</span>
+          </a>
+          <a class="big-link teal" href="https://linkedin.com/in/derrickfink" target="_blank" rel="noopener">
+            <span>linkedin.com/in/derrickfink</span>
+            <span class="arrow">→</span>
+          </a>
+        </div>
+      </section>
 
-    <!-- Footer -->
-    <footer>
-      <span>derrickfink.com</span>
-      <span>© 2026 — derrick fink</span>
-      <span>built with care, by hand</span>
-    </footer>
+      <!-- View switcher -->
+      <aside class="switcher" aria-label="alternate views">
+        <div class="label">// EASTER EGGS</div>
+        <h2>Same content. Different decade.</h2>
+        <div class="switcher-grid">
+          <a class="vbtn" href="/win95.html">
+            <span class="vbtn-mono">cmd · 1995</span>
+            <span class="vbtn-title">Windows 95 edition</span>
+            <span class="vbtn-desc">Boot sequence, dial-up, AIM buddy list, the works. Pop-up windows you can drag.</span>
+          </a>
+          <a class="vbtn" href="/mobile.html">
+            <span class="vbtn-mono">wm 2003 · 2003</span>
+            <span class="vbtn-title">HP iPAQ edition</span>
+            <span class="vbtn-desc">Windows Mobile 2003 in a Pocket PC, with a working D-pad and hardware buttons.</span>
+          </a>
+        </div>
+      </aside>
 
-  </div>
-</body>
+      <!-- Footer -->
+      <footer>
+        <span>derrickfink.com</span>
+        <span>© 2026 — derrick fink</span>
+        <span>built with care, by hand</span>
+      </footer>
+    </div>
+  </body>
 </html>
