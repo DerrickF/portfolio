@@ -1,5 +1,3 @@
-.DS_Store
-.claude/
-*.swp
-*.bak
 node_modules/
+_site/
+.DS_Store

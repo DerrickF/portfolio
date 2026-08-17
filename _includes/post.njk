@@ -1,0 +1,15 @@
+---
+layout: base.njk
+---
+<section class="grid-row">
+  <div class="grid-label mono">
+    // POST<br>
+    DATA_STREAM<br>
+    <span style="color: var(--border);">-------------</span><br>
+    <span style="color: var(--muted);">DATE: {{ page.date | isoDate }}</span>
+  </div>
+  <div class="grid-content post-content">
+    <h1>{{ title }}</h1>
+    {{ content | safe }}
+  </div>
+</section>
