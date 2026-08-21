@@ -13,6 +13,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Build with Eleventy
+        run: npx @11ty/eleventy
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -22,10 +33,5 @@ jobs:
 
       - name: Deploy static site to S3
         run: |
-          aws s3 sync . s3://derrickfink.com \
-            --delete \
-            --exclude ".git/*" \
-            --exclude ".github/*" \
-            --exclude ".claude/*" \
-            --exclude "**/README.txt" \
-            --exclude ".DS_Store"
+          aws s3 sync _site/ s3://derrickfink.com \
+            --delete
