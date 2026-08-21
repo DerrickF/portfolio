@@ -1,6 +1,6 @@
 module.exports = function(eleventyConfig) {
-  // Pass through any static assets if you add them later (e.g. images)
-  // eleventyConfig.addPassthroughCopy("assets");
+  // Pass through static assets
+  eleventyConfig.addPassthroughCopy("assets");
 
   // Simple date filter to format dates as YYYY-MM-DD
   eleventyConfig.addFilter("isoDate", function(dateObj) {
